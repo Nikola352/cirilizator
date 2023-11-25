@@ -68,9 +68,11 @@ def create_post():
         return jsonify({'error': 'Unauthorized'}), 401
 
     data = request.get_json()
+    print(data)
     title = data.get('title')
     text = data.get('text')
-    post_data = NewBlogPost(title=title, text=text)
+    category = data.get('category')
+    post_data = NewBlogPost(title=title, text=text, category=category)
     new_post = blog_post_service.create_post(post_data)
 
     return jsonify(new_post.as_dict()), 201
