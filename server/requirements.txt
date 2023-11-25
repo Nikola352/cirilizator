@@ -1,0 +1,7 @@
+flask~=3.0.0
+flask_cors
+flask_sqlalchemy
+flask_jwt_extended
+discord~=2.3.2
+configparser~=6.0.0
+requests~=2.31.0

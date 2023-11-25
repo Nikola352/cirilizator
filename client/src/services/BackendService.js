@@ -6,7 +6,6 @@ class BackendService {
             if (!apiEndpoint) {
                 throw new Error('API endpoint not specified in the environment variables.');
             }
-            //const apiEndpoint = 'localhost:5000/api/v1/'
             const response = await fetch(apiEndpoint + 'transliterate_text', {
                 method: 'POST',
                 headers: {

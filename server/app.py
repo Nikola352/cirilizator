@@ -142,7 +142,6 @@ def process_text():
 
 @app.route('/api/v1/discord_messages', methods=['GET'])
 def get_messages():
-    print(discord_bot.messages)
     return jsonify(discord_bot.messages)
 
 

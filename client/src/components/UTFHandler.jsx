@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import BackendService from '../services/BackendService.js';
 
 const UTFHandler = () => {
     const [selectedOption, setSelectedOption] = useState('ai');
