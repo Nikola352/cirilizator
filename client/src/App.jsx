@@ -1,15 +1,13 @@
 import './App.css'
-import Transliterator from "./components/Transliterator.jsx";
-import UTFHandler from "./components/UTFHandler.jsx";
+import { Button } from "@material-tailwind/react";
+import Home from './pages/Home'
 
 function App() {
   return (
-      <>
-        <div>
-            <Transliterator/>
-            <UTFHandler/>
-        </div>
-      </>
+    <div className="App ">
+      <Home />
+      
+    </div>
   )
 }
 
