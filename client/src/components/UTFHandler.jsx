@@ -38,7 +38,7 @@ const UTFHandler = () => {
                     <input
                         type="radio"
                         value="UTFToCyrillic"
-                        checked={selectedOption === 'ai'}
+                        checked={selectedOption === 'UTFToCyrillic'}
                         onChange={handleToggleChange}
                     />
                     UTF у ћирилицу
@@ -47,7 +47,7 @@ const UTFHandler = () => {
                     <input
                         type="radio"
                         value="cyrillicToUTF"
-                        checked={selectedOption === 'local'}
+                        checked={selectedOption === 'cyrillicToUTF'}
                         onChange={handleToggleChange}
                     />
                     Ћирилица у UTF
