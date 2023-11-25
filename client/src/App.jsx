@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react'
 import './App.css'
 import Transliterator from "./components/Transliterator.jsx";
+import UTFHandler from "./components/UTFHandler.jsx";
 
 function App() {
   return (
       <>
         <div>
-          <Transliterator/>
+            <Transliterator/>
+            <UTFHandler/>
         </div>
       </>
   )
