@@ -1,4 +1,3 @@
-from flask import Flask, jsonify
 from flask_cors import CORS
 from configparser import ConfigParser
 
@@ -13,12 +12,6 @@ from repositories import BlogPostRepository, AdminUserRepository
 app = Flask(__name__)
 CORS(app)
 
-# api routes
-@app.route('/api')
-def api():
-    data = {'hello': 'world'}
-    return jsonify(data)
-
 config = ConfigParser()
 config.read('config.conf')
 
@@ -26,12 +19,11 @@ config.read('config.conf')
 app.config['SQLALCHEMY_DATABASE_URI'] = config.get('Database', 'url', raw=True)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-init_db(app)
-
 # Configure Flask-JWT-Extended
 app.config['JWT_SECRET_KEY'] = config.get('JWT', 'secret_key', raw=True)
 jwt = JWTManager(app)
 
+init_db(app)
 
 # Initialize the repositories and services
 repository = BlogPostRepository(model=BlogPost, db=db)
@@ -40,7 +32,6 @@ admin_user_repository = AdminUserRepository(model=AdminUser, db=db)
 admin_user_service = AdminUserService(repository=admin_user_repository)
 
 
-# BlogPost CRUD routes
 @app.route('/api/v1/posts', methods=['GET'])
 def get_all_posts():
     print('called')
