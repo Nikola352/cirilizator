@@ -1,3 +1,5 @@
+from configparser import ConfigParser
+
 from flask import Flask, jsonify, request
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
 
@@ -8,15 +10,17 @@ from repositories import BlogPostRepository, AdminUserRepository
 
 app = Flask(__name__)
 
+config = ConfigParser()
+config.read('config.conf')
+
 # Configure Flask-SQLAlchemy
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://mysql_user:mysql_password@localhost:3306/cirilizator'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://xn__90afccojrclbbx_xn__90a3ac:HfUilhBmGzvoiY6WJcDAOUlRFP4aKg@185.82.212.80/mysql_g1'
+app.config['SQLALCHEMY_DATABASE_URI'] = config.get('Database', 'url', raw=True)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 init_db(app)
 
 # Configure Flask-JWT-Extended
-app.config['JWT_SECRET_KEY'] = 'plKFLoyJjG7WnXeIcxKM5D1nlYVthp8cAlcYx3O8'
+app.config['JWT_SECRET_KEY'] = config.get('JWT', 'secret_key', raw=True)
 jwt = JWTManager(app)
 
 
@@ -50,7 +54,7 @@ def create_post():
     current_user = get_jwt_identity()
 
     # Check if the current user is the admin
-    if current_user != '1Wqr::XjzJA:7&NV&=bycXD#@&G._a[]N+n@!BzE*).%%E]3/0':
+    if current_user != config.get('JWT', 'admin_username', raw=True):
         return jsonify({'error': 'Unauthorized'}), 401
 
     data = request.get_json()
@@ -68,7 +72,7 @@ def update_post(post_id):
     current_user = get_jwt_identity()
 
     # Check if the current user is the admin
-    if current_user != '1Wqr::XjzJA:7&NV&=bycXD#@&G._a[]N+n@!BzE*).%%E]3/0':
+    if current_user != config.get('JWT', 'admin_username', raw=True):
         return jsonify({'error': 'Unauthorized'}), 401
 
     data = request.get_json()
@@ -86,7 +90,7 @@ def delete_post(post_id):
     current_user = get_jwt_identity()
 
     # Check if the current user is the admin
-    if current_user != '1Wqr::XjzJA:7&NV&=bycXD#@&G._a[]N+n@!BzE*).%%E]3/0':
+    if current_user != config.get('JWT', 'admin_username', raw=True):
         return jsonify({'error': 'Unauthorized'}), 401
 
     deleted = blog_post_service.delete_post(post_id)
@@ -107,7 +111,6 @@ def login():
         return jsonify(access_token=access_token), 200
     else:
         return jsonify({'error': 'Invalid credentials'}), 401
-
 
 
 if __name__ == "__main__":
