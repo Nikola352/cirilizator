@@ -10,7 +10,7 @@ class BlogPostRepository:
         return self.model.query.get(post_id)
 
     def create_post(self, post_data):
-        new_post = self.model(title=post_data.title, text=post_data.text, category=post_data.category)
+        new_post = self.model(title=post_data.title, text=post_data.text, category=post_data.category, thumbnail=post_data.thumbnail)
         self.db.session.add(new_post)
         self.db.session.commit()
         return new_post

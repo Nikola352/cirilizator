@@ -5,19 +5,21 @@ class BlogPost(db.Model):
     __tablename__ = 'blog_posts'
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(255), nullable=False)
+    title = db.Column(db.String(50), nullable=False)
     text = db.Column(db.Text, nullable=False)
-    category = db.Column(db.Text, nullable=False)
+    category = db.Column(db.String(50), nullable=False)
+    thumbnail = db.Column(db.String(255))
 
     def as_dict(self):
         return {column.name: getattr(self, column.name) for column in self.__table__.columns}
 
 
 class NewBlogPost:
-    def __init__(self, title, text, category):
+    def __init__(self, title, text, category, thumbnail):
         self.title = title
         self.text = text
         self.category = category
+        self.thumbnail = thumbnail
 
 
 class AdminUser(db.Model):

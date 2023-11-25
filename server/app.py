@@ -1,13 +1,13 @@
 from flask_cors import CORS
 from configparser import ConfigParser
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_file
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
 
 import discord_bot
 from db import db, init_db
 from models import NewBlogPost, BlogPost, AdminUser
-from services import BlogPostService, AdminUserService, GPTService
+from services import BlogPostService, AdminUserService, GPTService, TransliterationService
 from repositories import BlogPostRepository, AdminUserRepository
 import threading
 
@@ -41,7 +41,7 @@ blog_post_service = BlogPostService(repository)
 admin_user_repository = AdminUserRepository(model=AdminUser, db=db)
 admin_user_service = AdminUserService(repository=admin_user_repository)
 gpt_service = GPTService(GPT_API_KEY, GPT_API_URL)
-
+transliteration_service = TransliterationService()
 
 @app.route('/api/v1/posts', methods=['GET'])
 def get_all_posts():
@@ -72,7 +72,8 @@ def create_post():
     title = data.get('title')
     text = data.get('text')
     category = data.get('category')
-    post_data = NewBlogPost(title=title, text=text, category=category)
+    thumbnail = data.get('thumbnail')
+    post_data = NewBlogPost(title=title, text=text, category=category, thumbnail=thumbnail)
     new_post = blog_post_service.create_post(post_data)
 
     return jsonify(new_post.as_dict()), 201
@@ -145,6 +146,25 @@ def process_text():
 @app.route('/api/v1/discord_messages', methods=['GET'])
 def get_messages():
     return jsonify(discord_bot.messages)
+
+
+@app.route('/api/v1/transliterate_pdf', methods=['POST'])
+def transliterate_pdf():
+    if 'file' not in request.files:
+        return "No file part"
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return "No selected file"
+
+    if file:
+        edited_file_path = transliteration_service.get_edited_file_path(file)
+
+        if edited_file_path is None:
+            return "Error: file path is None"
+
+        return send_file(edited_file_path, as_attachment=True, download_name="edited_file.pdf", mimetype="application/pdf")
 
 
 if __name__ == "__main__":
