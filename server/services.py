@@ -16,3 +16,11 @@ class BlogPostService:
 
     def delete_post(self, post_id):
         return self.repository.delete_post(post_id)
+
+
+class AdminUserService:
+    def __init__(self, repository):
+        self.repository = repository
+
+    def get_user_by_username(self, username):
+        return self.repository.get_user_by_username(username)

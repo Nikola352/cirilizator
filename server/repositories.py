@@ -31,3 +31,12 @@ class BlogPostRepository:
             self.db.session.commit()
             return True
         return False
+
+
+class AdminUserRepository:
+    def __init__(self, model, db):
+        self.model = model
+        self.db = db
+
+    def get_user_by_username(self, username):
+        return self.model.query.filter_by(username=username).first()
