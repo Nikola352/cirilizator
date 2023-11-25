@@ -1,6 +1,7 @@
 import './App.css'
 import Transliterator from "./components/Transliterator.jsx";
 import UTFHandler from "./components/UTFHandler.jsx";
+import ChatComponent from "./components/ChatComponent.jsx";
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
         <div>
             <Transliterator/>
             <UTFHandler/>
+            <ChatComponent/>
         </div>
       </>
   )

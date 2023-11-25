@@ -1,14 +1,15 @@
-import requests
 from flask_cors import CORS
 from configparser import ConfigParser
 
 from flask import Flask, jsonify, request
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
 
+import discord_bot
 from db import db, init_db
 from models import NewBlogPost, BlogPost, AdminUser
 from services import BlogPostService, AdminUserService, GPTService
 from repositories import BlogPostRepository, AdminUserRepository
+import threading
 
 app = Flask(__name__)
 CORS(app)
@@ -29,6 +30,11 @@ GPT_API_URL = 'https://api.openai.com/v1/engines/gpt-3.5-turbo/completions'
 
 init_db(app)
 
+# Start the bot in a separate thread
+discord_thread = threading.Thread(target=discord_bot.run_discord_bot)
+discord_thread.start()
+
+
 # Initialize the repositories and services
 repository = BlogPostRepository(model=BlogPost, db=db)
 blog_post_service = BlogPostService(repository)
@@ -36,9 +42,9 @@ admin_user_repository = AdminUserRepository(model=AdminUser, db=db)
 admin_user_service = AdminUserService(repository=admin_user_repository)
 gpt_service = GPTService(GPT_API_KEY, GPT_API_URL)
 
+
 @app.route('/api/v1/posts', methods=['GET'])
 def get_all_posts():
-    print('called')
     posts = blog_post_service.get_all_posts()
     return jsonify([post.as_dict() for post in posts])
 
@@ -132,6 +138,12 @@ def process_text():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/v1/discord_messages', methods=['GET'])
+def get_messages():
+    print(discord_bot.messages)
+    return jsonify(discord_bot.messages)
 
 
 if __name__ == "__main__":
