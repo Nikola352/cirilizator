@@ -20,6 +20,16 @@ export default function Footer() {
                 color="blue-gray"
                 className="font-normal transition-colors hover:text-primary focus:text-primary"
             >
+                Развој
+            </Typography>
+            </li>
+            <li>
+            <Typography
+                as="a"
+                href="#"
+                color="blue-gray"
+                className="font-normal transition-colors hover:text-primary focus:text-primary"
+            >
                 Дизајн
             </Typography>
             </li>
@@ -53,6 +63,7 @@ export default function Footer() {
                 Заједница
             </Typography>
             </li>
+            
         </ul>
         </div>
         <hr className="my-8 border-blue-gray-50" />
