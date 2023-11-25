@@ -7,7 +7,7 @@ export default function Footer() {
         <div className="flex flex-row max-w-7xl pb-8 px-4 mx-auto flex-wrap items-center justify-center gap-y-6 gap-x-12 bg-white text-center md:justify-between">
             <Typography
             as="a"
-            href="#"
+            href="/"
             className="mr-4 cursor-pointer py-1.5 font-medium text-lg text-primary-100"
             >
             Ћирилизатор<span className="text-primary">.</span>
@@ -16,7 +16,7 @@ export default function Footer() {
             <li>
             <Typography
                 as="a"
-                href="#"
+                href="/razvoj"
                 color="blue-gray"
                 className="font-normal transition-colors hover:text-primary focus:text-primary"
             >
