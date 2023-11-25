@@ -1,3 +1,4 @@
+import requests
 from flask_cors import CORS
 from configparser import ConfigParser
 
@@ -6,7 +7,7 @@ from flask_jwt_extended import JWTManager, jwt_required, create_access_token, ge
 
 from db import db, init_db
 from models import NewBlogPost, BlogPost, AdminUser
-from services import BlogPostService, AdminUserService
+from services import BlogPostService, AdminUserService, GPTService
 from repositories import BlogPostRepository, AdminUserRepository
 
 app = Flask(__name__)
@@ -23,6 +24,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = config.get('JWT', 'secret_key', raw=True)
 jwt = JWTManager(app)
 
+GPT_API_KEY = config.get('GPT', 'api_key')
+GPT_API_URL = 'https://api.openai.com/v1/engines/gpt-3.5-turbo/completions'
+
 init_db(app)
 
 # Initialize the repositories and services
@@ -30,7 +34,7 @@ repository = BlogPostRepository(model=BlogPost, db=db)
 blog_post_service = BlogPostService(repository)
 admin_user_repository = AdminUserRepository(model=AdminUser, db=db)
 admin_user_service = AdminUserService(repository=admin_user_repository)
-
+gpt_service = GPTService(GPT_API_KEY, GPT_API_URL)
 
 @app.route('/api/v1/posts', methods=['GET'])
 def get_all_posts():
@@ -111,6 +115,23 @@ def login():
         return jsonify(access_token=access_token), 200
     else:
         return jsonify({'error': 'Invalid credentials'}), 401
+
+
+@app.route('/api/v1/transliterate_text', methods=['POST'])
+def process_text():
+    try:
+        data = request.json
+        prompt = data.get('prompt', '')
+
+        if not prompt:
+            return jsonify({'error': 'No prompt provided'}), 400
+
+        prompt = 'Transliterate the following text from Serbian latin to Serbian cyrillic: ' + prompt
+        response = gpt_service.call_gpt_api(prompt)
+        return jsonify({'result': response})
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 if __name__ == "__main__":
