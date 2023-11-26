@@ -25,6 +25,32 @@ class BackendService {
             throw error;
         }
     }
+
+    static async getBlogPosts() {
+        try {
+            const apiEndpoint = import.meta.env.VITE_API_ENDPOINT;
+
+            if (!apiEndpoint) {
+                throw new Error('API endpoint not specified in the environment variables.');
+            }
+
+            console.log("path: " + apiEndpoint + 'posts/all');
+            const response = await fetch(apiEndpoint + 'posts/all', {
+                method: 'GET',
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.table(data);
+            return data;
+        } catch (error) {
+            console.error('Error:', error);
+            throw error;
+        }
+    }
 }
 
 export default BackendService;

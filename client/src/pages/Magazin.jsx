@@ -1,13 +1,24 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { Typography } from "@material-tailwind/react";
 import CTA from "../components/CTA";
 import BlogCard from "../components/BlogCards";
+import useFetch from "../hooks/useFetch.js";
+import BackendService from "../services/BackendService.js";
 
 export default function Magazin(){
     const [activeBtn, setActiveBtn] = useState(1);
     const handleBtnClick = (buttonId) => {
         setActiveBtn(buttonId);
     }
+    const [blogPosts, setBlogPosts] = useState([]);
+
+    useEffect(() => {
+        BackendService.getBlogPosts().then((result) => {
+            console.log(result);
+            setBlogPosts(result);
+        });
+    }, []);
+
     //TODO: pristupiti bazi dobaviti po kategorijama 2-3 bloga
     //na stranici prikazivati do 9 blogova po kategorijama
     const infoBlogs = [
@@ -44,8 +55,8 @@ export default function Magazin(){
                     <button className={`button-35 ${activeBtn===4 ? 'selected':''}`} onClick={() => handleBtnClick(4)} >Marketing</button>
                 </div>
                 <div className="cards flex max-w-7xl mx-auto flex-row gap-16 flex-wrap justify-around">
-                    {infoBlogs.map((blog) => (
-                        <BlogCard blog={blog} key={blog.key}/>
+                    {blogPosts.map((blog) => (
+                        <BlogCard blog={blog} key={blog.id}/>
                         ))}
                 </div>
                 <div className="btn-container my-8 flex justify-center " >

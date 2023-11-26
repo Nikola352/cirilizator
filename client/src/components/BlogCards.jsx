@@ -2,13 +2,27 @@ import {
     Card,
     CardHeader,
     CardBody,
-    CardFooter,
     Typography,
-    Avatar,
-    Tooltip,
   } from "@material-tailwind/react";
+import {useEffect, useState} from "react";
 
-export default function BlogCard(props){
+export default function BlogCard(props) {
+    const [imageSrc, setImageSrc] = useState("../assets/default_blog_post_thumbnail.png");
+
+    useEffect(() => {
+        console.log("default src: " + imageSrc);
+    })
+    useEffect(() => {
+        // Attempt to load the actual image
+        const img = new Image();
+        img.onload = () => {
+            // If the image is successfully loaded, update the image source
+            setImageSrc(props.blog.thumbnail);
+            console.log("updated src: ");
+        };
+        img.src = props.blog.thumbnail;
+    }, [props.blog.thumbnail]);
+
     return(
         <Card className="max-w-[24rem] overflow-hidden shadow-xl cursor-pointer">
             <CardHeader
@@ -18,8 +32,11 @@ export default function BlogCard(props){
                 className="m-0 rounded-none"
             >
                 <img
-                src={props.blog.thumbnail}
-                alt="ui/ux review check"
+                src={imageSrc}
+                alt="Blog post thumbnail"
+                // onError={(event) => {
+                //     event.target.src = "../assets/default_blog_post_thumbnail.png";
+                // }}
                 />
             </CardHeader>
             <CardBody className="px-4 py-8">
