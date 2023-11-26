@@ -4,9 +4,9 @@ This application consists of a Python Flask backend and a JavaScript React Vite 
 
 ## Running the Backend
 
-1. Navigate to the `backend` directory:
+1. Navigate to the `server` directory:
 ```bash
-  cd backend
+  cd server
 ```
    
 2. Install the required Python packages using pip:
@@ -25,9 +25,9 @@ View the docs: http://localhost:5000/apidocs/#/
 
 ## Running the Frontend
 
-1. Navigate to the frontend directory:
+1. Navigate to the `client` directory:
 ```bash
-  cd frontend
+  cd client
 ```
 
 2. Install the required Node.js packages using npm:
