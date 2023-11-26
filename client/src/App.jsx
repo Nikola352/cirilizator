@@ -13,11 +13,7 @@ import Login from './pages/Login';
 import Admin from './pages/Admin';
 import Dizajn from './pages/Dizajn';
 import BlogPost from './pages/BlogPost';
-
-
-
-
-
+import {UserProvider} from "./UserContext.jsx";
 
 function App() {
   const [showNavFooter, setShowNavFooter] = useState(true);

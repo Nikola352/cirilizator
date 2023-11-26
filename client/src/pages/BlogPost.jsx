@@ -1,15 +1,13 @@
 
 import Markdown from 'react-markdown';
 import {useEffect, useState} from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 export default function BlogPost() {
-    const { id } = useParams();
     const location = useLocation();
     const [blog, setBlog] = useState(location.state?.blog || {});
 
     useEffect(() => {
-        // Assuming you have received the blog data as a prop
         setBlog(location.state?.blog || {});
     }, [location.state]);
 
