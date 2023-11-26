@@ -4,7 +4,9 @@ import requests
 import os
 
 from fonts.font_parser import Font
-#from fonts.font_matcher import match_fonts
+from fonts.font_matcher import match_fonts
+from services.font_service import FontService
+
 
 FONTS_DIR = os.path.join(os.getcwd(), 'resources', 'fonts')
 
