@@ -117,7 +117,7 @@ export default function NavbarDefault() {
  
   return (
     <Navbar  className="sticky top-[2rem] z-10 mx-auto max-w-screen-3xl px-6 py-4  lg:px-8 lg:py-4 shadow-lg max-w-7xl">
-      <div className="container mx-auto flex items-center justify-between text-blue-gray-900 ">
+      <div className=" mx-auto flex items-center justify-between text-blue-gray-900 ">
         <Typography
           as="a"
           href="/"

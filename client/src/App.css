@@ -122,3 +122,8 @@
   color: var(--primary-color);
   padding-left: .4rem;
 }
+.container{
+  max-width: 1280px;
+  margin: 4rem auto;
+  padding-top: 2rem;
+}
