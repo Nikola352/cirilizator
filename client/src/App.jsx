@@ -13,10 +13,7 @@ import Login from './pages/Login';
 import Admin from './pages/Admin';
 import Dizajn from './pages/Dizajn';
 import BlogPost from './pages/BlogPost';
-
-
-
-
+import { UserProvider } from './UserContext';
 
 
 function App() {
@@ -31,26 +28,28 @@ function App() {
   })
   return (
     <Router>
-      <div className="App ">
-        {showNavFooter && <Navbar />}
-          <div className="content">
-            <Switch>
-              {console.log(window.location.pathname)}
-              <Route path="/" element={<Home />} />
-              <Route path="/razvoj" element={<Razvoj />} />
-              <Route path="/magazin" element={<Magazin />} />
-              <Route path="/resursi" element={<Resursi />} />
-              <Route path="/dizajn" element={<Dizajn />} />
-              {/* TODO */}
-              <Route path="/blog/:id" element={<BlogPost />} />
-              
-              <Route path="/zajednica" element={<Zajednica />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="/login" element={<Login />} />
-            </Switch>
-          </div>
-        {showNavFooter && <Footer />} 
-      </div>
+      <UserProvider>
+        <div className="App ">
+          {showNavFooter && <Navbar />}
+            <div className="content">
+              <Switch>
+                {console.log(window.location.pathname)}
+                <Route path="/" element={<Home />} />
+                <Route path="/razvoj" element={<Razvoj />} />
+                <Route path="/magazin" element={<Magazin />} />
+                <Route path="/resursi" element={<Resursi />} />
+                <Route path="/dizajn" element={<Dizajn />} />
+                {/* TODO */}
+                <Route path="/blog/:id" element={<BlogPost />} />
+                
+                <Route path="/zajednica" element={<Zajednica />} />
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/login" element={<Login />} />
+              </Switch>
+            </div>
+          {showNavFooter && <Footer />} 
+        </div>
+      </UserProvider>
     </Router>
   )
 }
