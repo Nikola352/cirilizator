@@ -2,6 +2,7 @@ from database.db import db
 
 
 class Font(db.Model):
+    __tablename__ = 'font'
     id = db.Column(db.Integer, primary_key=True)
     category = db.Column(db.String(255), nullable=False)
     font_family = db.Column(db.String(255), nullable=False)

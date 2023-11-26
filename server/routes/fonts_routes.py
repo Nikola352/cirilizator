@@ -36,12 +36,12 @@ def create_font_blueprint(font_service, google_fonts_api_key):
         return jsonify({'error': 'Font pair not found'}), 404
 
     # font that matches the given font
-    @font_bp.route('/api/v1/fonts/pair/<int:font_id>', methods=['GET'])
-    def get_matching_font_pair(font_id):
-        font_pair = font_service.get_matching_font_pair(font_id)
-        if font_pair:
-            return jsonify(font_pair)
-        return jsonify({'error': 'Font pair not found'}), 404
+    @font_bp.route('/api/v1/fonts/pair/<string:font_name>', methods=['GET'])
+    def get_matching_font(font_name):
+        font = font_service.get_matching_font(font_name)
+        if font:
+            return jsonify(font.as_dict())
+        return jsonify({'error': 'Font not found'}), 404
 
     # A threading event to signal task completion
     task_running = threading.Event()

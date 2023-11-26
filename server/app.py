@@ -19,6 +19,9 @@ from routes.blog_post_routes import create_blog_post_blueprint
 from routes.discord_routes import create_discord_blueprint
 from routes.fonts_routes import create_font_blueprint
 from routes.transliteration_routes import create_transliteration_blueprint
+from fonts.font_collector import start_collector
+from models.font_match import FontMatch
+from repositories.font_match_repository import FontMatchRepository
 from services import discord_bot_service
 from services import transliteration_service
 from services.auth_service import AuthService
@@ -59,7 +62,8 @@ auth_service = AuthService(repository=auth_repository)
 blog_post_repository = BlogPostRepository(model=BlogPost, db=db)
 blog_post_service = BlogPostService(blog_post_repository)
 font_repository = FontRepository(model=Font, db=db)
-font_service = FontService(font_repository)
+font_match_repository = FontMatchRepository(model=FontMatch, db=db)
+font_service = FontService(font_repository, font_match_repository)
 gpt_service = GPTService(GPT_API_KEY, GPT_API_URL)
 
 # Register the route blueprints
@@ -72,6 +76,6 @@ app.register_blueprint(create_transliteration_blueprint(transliteration_service,
 
 if __name__ == "__main__":
     # TODO: start collector on an api call
-    # with app.app_context():
-    #     start_collector(GOOGLE_FONTS_API_KEY, font_service)
+    with app.app_context():
+        start_collector(GOOGLE_FONTS_API_KEY, font_service)
     app.run(debug=True)
