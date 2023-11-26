@@ -20,6 +20,7 @@ This application consists of a Python Flask backend and a JavaScript React Vite 
   flask run
 ```
 The backend will start on http://localhost:5000.
+View the docs: http://localhost:5000/apidocs/#/
 
 
 ## Running the Frontend

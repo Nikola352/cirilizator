@@ -1,4 +1,5 @@
 config.conf
 resources
 __pycache__
+*.py[cod]
 fitz

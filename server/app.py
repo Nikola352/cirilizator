@@ -6,6 +6,7 @@ from configparser import ConfigParser
 from flask import Flask, jsonify, request, send_file
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
 from flasgger import Swagger, swag_from
+import threading
 
 import discord_bot
 import transliteration_service
@@ -13,6 +14,10 @@ from db import db, init_db
 from models import BlogPost, AdminUser
 from services import BlogPostService, AdminUserService, GPTService
 from repositories import BlogPostRepository, AdminUserRepository
+from models import Font, NewBlogPost, BlogPost, AdminUser
+from services import BlogPostService, AdminUserService, FontService, GPTService
+from repositories import BlogPostRepository, AdminUserRepository, FontRepository
+# from fonts.font_collector import start_collector
 import threading
 
 app = Flask(__name__)
@@ -33,6 +38,8 @@ jwt = JWTManager(app)
 GPT_API_KEY = config.get('GPT', 'api_key')
 GPT_API_URL = 'https://api.openai.com/v1/engines/gpt-3.5-turbo/completions'
 
+GOOGLE_FONTS_API_KEY = config.get('GoogleFonts', 'api_key', raw=True)
+
 init_db(app)
 
 # Start the bot in a separate thread
@@ -46,6 +53,12 @@ blog_post_service = BlogPostService(repository)
 admin_user_repository = AdminUserRepository(model=AdminUser, db=db)
 admin_user_service = AdminUserService(repository=admin_user_repository)
 gpt_service = GPTService(GPT_API_KEY, GPT_API_URL)
+font_repository = FontRepository(model=Font, db=db)
+font_service = FontService(font_repository)
+
+
+import routes.fonts_routes
+
 
 
 @app.route('/api/v1/posts/all', methods=['GET'])
@@ -731,5 +744,53 @@ def transliterate_txt_file():
     return "Invalid file format. Please upload a .txt file."
 
 
+
+# @app.route('/api/v1/fonts', methods=['GET'])
+# def get_all_fonts():
+#     fonts = font_service.get_all_fonts()
+#     return jsonify([font.as_dict() for font in fonts])
+
+
+# @app.route('/api/v1/fonts/<int:font_id>', methods=['GET'])
+# def get_font_by_id(font_id):
+#     font = font_service.get_font_by_id(font_id)
+#     if font:
+#         return jsonify(font.as_dict())
+#     return jsonify({'error': 'Font not found'}), 404
+
+
+# @app.route('/api/v1/fonts/name/<string:font_name>', methods=['GET'])
+# def get_font_by_name():
+#     font_name = request.args.get('name')
+#     font = font_service.get_font_by_name(font_name)
+#     if font:
+#         return jsonify(font.as_dict())
+#     return jsonify({'error': 'Font not found'}), 404
+
+
+# # random matching font pair
+# @app.route('/api/v1/fonts/pair', methods=['GET'])
+# def get_font_pair():
+#     font_pair = font_service.get_random_font_pair()
+#     if font_pair:
+#         return jsonify(font_pair)
+#     return jsonify({'error': 'Font pair not found'}), 404
+
+
+# # font that matches the given font
+# @app.route('/api/v1/fonts/pair/<int:font_id>', methods=['GET'])
+# def get_matching_font_pair(font_id):
+#     font_pair = font_service.get_matching_font_pair(font_id)
+#     if font_pair:
+#         return jsonify(font_pair)
+#     return jsonify({'error': 'Font pair not found'}), 404
+
+
+
+
+
 if __name__ == "__main__":
+    # TODO: start collector on an api call
+    # with app.app_context():
+    #     start_collector(GOOGLE_FONTS_API_KEY, font_service)
     app.run(debug=True)
