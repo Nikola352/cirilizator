@@ -19,31 +19,6 @@ export default function Magazin(){
         });
     }, []);
 
-    //TODO: pristupiti bazi dobaviti po kategorijama 2-3 bloga
-    //na stranici prikazivati do 9 blogova po kategorijama
-    const infoBlogs = [
-        {
-            key: 1,
-            title: "Cao",
-            text: "ldsfsldfk slskdf;l kssldkfsl",
-            category: "Info",
-            thumbnail: "https://assets-global.website-files.com/628803debd8bd01d1d3543bd/628d02cf335abecbf83361d4_graphic-design-101-course-image-learnbook-webflow-ecommerce-template-p-500.png"
-        },
-        {
-            key: 2,
-            title: "Cao",
-            text: "ldsfsldfk slskdf;l kssldkfsl",
-            category: "Info",
-            thumbnail: "https://assets-global.website-files.com/628803debd8bd01d1d3543bd/628d02cf335abecbf83361d4_graphic-design-101-course-image-learnbook-webflow-ecommerce-template-p-500.png"
-        },
-        {
-            key: 3,
-            title: "Cao",
-            text: "ldsfsldfk slskdf;l kssldkfsl",
-            category: "Info",
-            thumbnail: "https://assets-global.website-files.com/628803debd8bd01d1d3543bd/628d02cf335abecbf83361d4_graphic-design-101-course-image-learnbook-webflow-ecommerce-template-p-500.png"
-        }
-    ]
     return(
         <div className="max-w-7xl mx-auto my-24">
                 <Typography className="heading mt-24 mb-16 ml-4 text-primary-100"> Информације </Typography>
