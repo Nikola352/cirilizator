@@ -21,7 +21,6 @@ from routes.blog_post_routes import create_blog_post_blueprint
 from routes.discord_routes import create_discord_blueprint
 from routes.fonts_routes import create_font_blueprint
 from routes.transliteration_routes import create_transliteration_blueprint
-from fonts.font_collector import start_collector
 from models.font_match import FontMatch
 from repositories.font_match_repository import FontMatchRepository
 from services import discord_bot_service
