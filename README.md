@@ -44,14 +44,20 @@ The frontend will be accessible at http://localhost:5173.
 ## Usage
 Access the frontend in your web browser at http://localhost:5173.
 
-### Transliteration
-Choose between AI-based or local transliteration.
+Access the login page at http://localhost:5173/login
 
-Enter text in the input area.
-
-Click the "Submit" button to see the transliterated text in the output area.
+Create a blog post at http://localhost:5173/admin
 
 ## Notes
 Ensure both the backend and frontend servers are running simultaneously for the full functionality of the application.
 
 Make sure to install the required dependencies using pip install -r requirements.txt and npm install for the backend and frontend, respectively.
+
+## TODO
+Add backend tests
+
+Add more backend docs
+
+Refactor some frontend code
+
+Make buttons for /login and /admin
