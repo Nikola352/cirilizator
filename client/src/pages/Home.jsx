@@ -10,11 +10,11 @@ export default function Home() {
     
     return(
         <div>
-            <Navbar />
+            {/* <Navbar /> */}
             <Banner />
             <FontTypesBanner />
             <FeatureSection  />
-            <Footer />
+            {/* <Footer /> */}
 
             
         </div>

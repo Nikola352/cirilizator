@@ -71,3 +71,54 @@
     padding: 13px 50px 13px;
   }
 }
+
+
+
+/* CSS */
+.button-35 {
+  align-items: center;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: transparent 0 0 0 3px,rgba(18, 18, 18, .1) 0 6px 20px;
+  box-sizing: border-box;
+  color: #888;
+  cursor: pointer;
+  display: inline-flex;
+  flex: 1 1 auto;
+  font-family: Inter,sans-serif;
+  font-size: 1.2rem;
+  justify-content: center;
+  line-height: 1;
+  margin: 0;
+  outline: none;
+  padding: 1rem 1.2rem;
+  text-align: center;
+  text-decoration: none;
+  transition: box-shadow .2s,-webkit-box-shadow .2s;
+  white-space: nowrap;
+  border: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  height: 4rem;
+  max-width: 140px;
+}
+
+.button-35:hover {
+  box-shadow: var(--primary-color) 0 0 0 2px, transparent 0 0 0 0;
+  color: var(--primary-color);
+}
+.selected{
+  box-shadow: var(--primary-color) 0 0 0 2px, transparent 0 0 0 0;
+  color: var(--primary-color);
+}
+.link-section{
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-top: 2rem;
+}
+.link{
+  font-weight: 400;
+  color: var(--primary-color);
+  padding-left: .4rem;
+}

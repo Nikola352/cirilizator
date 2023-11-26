@@ -3,12 +3,12 @@ export default function FontTypesBanner() {
         {
             id:1,
             title: "Сериф",
-            image: "https://assets-global.website-files.com/6262d15e87c1ba75ee7ce234/6264760b0e101413fbe439c8_sans-serif.svg"
+            image: "https://assets-global.website-files.com/6262d15e87c1ba75ee7ce234/6264760b0e101461a5e439c9_serif.svg"
         },
         {
             id:2,
             title: "Санс-сериф",
-            image: "https://assets-global.website-files.com/6262d15e87c1ba75ee7ce234/6264760b0e101461a5e439c9_serif.svg"
+            image: "https://assets-global.website-files.com/6262d15e87c1ba75ee7ce234/6264760b0e101413fbe439c8_sans-serif.svg"
         },
         {
             id:3,
