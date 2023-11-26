@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { UserContext } from "../UserContext";
 
 const useRequest = (url, method) => { 
     const [isPending, setIsPending] = useState(false);
@@ -8,21 +9,26 @@ const useRequest = (url, method) => {
     
     const sendRequest = async (data) => {
         setIsPending(true);
+        const jwt = localStorage.getItem("jwt");
         try{
             setSentData(data);
-            fetch(url, {
+            let res = await fetch(url, {
                 method: method,
-                headers: {"Content-Type": "application/json"},
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + jwt,
+                },
                 body: JSON.stringify(data)
-            }).then(res => {
-                if(res.ok){
-                    setResult(res.json());
-                    setError(null);
-                } else{
-                    throw Error("Could not write data");
-                }
             });
+            if(res.ok){
+                setResult(await res.json());
+                setError(null);
+            } else {
+                setResult(null);
+                setError(null);
+            }
         } catch(err){
+            console.log(err);
             setError(err.message);
         } finally{
             setIsPending(false);

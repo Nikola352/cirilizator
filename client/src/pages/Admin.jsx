@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import TextInput from '../components/TextInput';
 import CTA from '../components/CTA';
 import { useState } from 'react';
@@ -11,7 +11,7 @@ export default function Admin() {
     const [open, setOpen] = useState(false);
     const [error, setError] = useState(true);
     const [errors, setErrors] = useState({});
-    const { sendRequest, isPending, errorRequest, result, sentData } = useRequest('localhost:5000/api/v1/posts', 'POST');
+    const { sendRequest, isPending, error: errorRequest, result, sentData } = useRequest('localhost:5000/api/v1/posts', 'POST');
     const [Message, setErrorMessage] = useState("");
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState("");
@@ -68,11 +68,24 @@ export default function Admin() {
                 setErrorMessage(errorMessage);
 
             }
-
         }
-        
         // setOpen(!open);
     }
+
+    useEffect(() => {
+        console.log(isPending, errorRequest, result, sentData);
+        if(errorRequest){
+            setError(true);
+            setOpen(!open);
+            setErrorMessage(errorMessage);
+        }
+        else if(result){
+            setError(false);
+            setOpen(!open);
+            setErrorMessage(successMessage);
+        }
+    }, [isPending, error, result])
+
     const successMessage = "Успешно сте креирали нови блог!"
     const errorMessage = "Дошло је до грешке приликом креирања новог блога!"
     return(
@@ -98,7 +111,7 @@ export default function Admin() {
                     <h1 className='text-3xl text-primary-50 mb-16'>Preview</h1>
                     <Preview title={title} category={category} image={image} description={description}/>
                 </div>
-                <DialogComponent open={open} setOpen={setOpen} handleSubmit={handleSubmit} text={errorMessage} error={error}/>
+                <DialogComponent open={open} setOpen={setOpen} handleSubmit={handleSubmit} text={Message} error={error}/>
 
 
 
