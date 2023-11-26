@@ -33,10 +33,6 @@ export default function Magazin(){
                         <BlogCard blog={blog} key={blog.id}/>
                         ))}
                 </div>
-                <div className="btn-container my-8 flex justify-center " >
-                    <CTA text={"Сви блогови"}  img={null}/>
-                    {/* path="/magazin" izmjenitni path */}
-                </div>
         </div>
     )
 }
