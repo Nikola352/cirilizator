@@ -41,6 +41,13 @@ def create_font_blueprint(font_service, jwt_service):
             return jsonify(font.as_dict())
         return jsonify({'error': 'Font not found'}), 404
 
+    @font_bp.route('/api/v1/fonts/random_pair', methods=['GET'])
+    def get_random_pair():
+        fonts = font_service.get_random_font_pair()
+        if fonts:
+            return jsonify(fonts)
+        return jsonify({'error': 'Font not found'}), 404
+
     @font_bp.route('/api/v1/fonts/collector', methods=['POST'])
     @jwt_required()
     def start_font_collector():
