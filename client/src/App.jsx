@@ -1,7 +1,6 @@
 import './App.css'
-import { Button } from "@material-tailwind/react";
 import Home from './pages/Home'
-import { BrowserRouter as Router, Routes as Switch, Route } from "react-router-dom";
+import {BrowserRouter as Router, Routes as Switch, Route} from "react-router-dom";
 import { useState, useEffect } from 'react';
 import Navbar from './components/Navbar'
 import Footer from './components/Footer';
@@ -39,7 +38,7 @@ function App() {
                 <Route path="/resursi" element={<Resursi />} />
                 <Route path="/dizajn" element={<Dizajn />} />
                 {/* TODO */}
-                <Route path="/blog/:id" element={<BlogPost />} />
+                <Route path="/blogs/:id" element={<BlogPost />} />
                 
                 <Route path="/zajednica" element={<Zajednica />} />
                 <Route path="/admin" element={<Admin />} />
