@@ -26,7 +26,7 @@ export default function Razvoj() {
                 
             </div>
             <div className="cards flex max-w-7xl mx-auto flex-row gap-16">
-                {blogPosts.map((blog) => (
+                {blogPosts.slice(0, 3).map((blog) => (
                     <BlogCard blog={blog} key={blog.key}/>
                     ))}
             </div>
