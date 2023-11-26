@@ -4,13 +4,15 @@ import CTA from '../components/CTA';
 import { useState } from 'react';
 import DialogComponent from '../components/DialogComponent';
 import Preview from '../components/Preview';
+import useRequest from '../hooks/useRequest';
 
 
 export default function Admin() {
     const [open, setOpen] = useState(false);
     const [error, setError] = useState(true);
     const [errors, setErrors] = useState({});
-
+    const { sendRequest, isPending, errorRequest, result, sentData } = useRequest('localhost:5000/api/v1/posts', 'POST');
+    const [Message, setErrorMessage] = useState("");
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState("");
     const [image, setImage] = useState("");
@@ -30,7 +32,7 @@ export default function Admin() {
             value: '3'
         }
     ];
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
         if(title === "" || category === "" || image === "" || description === ""){
             setErrors({
                 title: title === "" ? "Наслов је обавезан" : null,
@@ -48,8 +50,25 @@ export default function Admin() {
                 image: null,
                 description: null,
             })
-            setError(false);
-            setOpen(!open);
+            const formData = {
+                title: title,
+                category: category,
+                image: image,
+                description: description
+            }
+            sendRequest(formData);  
+            if(isPending === false && errorRequest === false ){
+                setError(false);
+                setOpen(!open);
+                setErrorMessage(successMessage);
+            }
+            else{
+                setError(true);
+                setOpen(!open);
+                setErrorMessage(errorMessage);
+
+            }
+
         }
         
         // setOpen(!open);
@@ -70,7 +89,7 @@ export default function Admin() {
                     <TextInput label="Опис" placeholder="Унесите опис" type="textarea" value={description} onChange={(e) => setDescription(e.target.value)} />
                     {errors.description && <p className="text-red-500 text-sm">{errors.description}</p>}
                     <div className="btn-container block">
-                        <CTA text={"Сачувај"} handleSubmit={handleSubmit} img={null}/>
+                        <CTA text={"Сачувај"} handleSubmit={(e) => handleSubmit(e)} img={null}/>
                     </div>
 
                 </div>

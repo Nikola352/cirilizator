@@ -16,7 +16,7 @@ const useRequest = (url, method) => {
                 body: JSON.stringify(data)
             }).then(res => {
                 if(res.ok){
-                    setResult(res.body);
+                    setResult(res.json());
                     setError(null);
                 } else{
                     throw Error("Could not write data");
