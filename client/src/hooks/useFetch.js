@@ -22,9 +22,7 @@ const useFetch = (url) => {
                 setIsPending(false)
             }
         }
-        setTimeout(() => {
-            fetchData()
-        }, 300)
+        fetchData()
     }, [url]);
 
     return {data, isPending, error}
