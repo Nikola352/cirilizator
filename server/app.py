@@ -50,12 +50,15 @@ def create_app():
 
     # Configure Flask-JWT-Extended
     app.config['JWT_SECRET_KEY'] = config.get('JWT', 'secret_key', raw=True)
-    jwt = JWTManager(app)
+    JWTManager(app)
 
     GPT_API_KEY = config.get('GPT', 'api_key')
     GPT_API_URL = 'https://api.openai.com/v1/engines/gpt-3.5-turbo/completions'
 
     GOOGLE_FONTS_API_KEY = config.get('GoogleFonts', 'api_key', raw=True)
+
+    ADMIN_USERNAME = config.get('Database', 'admin_username')
+    ADMIN_PASSWORD = config.get('Database', 'admin_password')
 
     init_db(app)
 
@@ -83,7 +86,7 @@ def create_app():
     app.register_blueprint(create_transliteration_blueprint(transliteration_service, gpt_service))
 
     font_service.start_collector(app.app_context())
-    auth_service.insert_default_admin(app.app_context())
+    auth_service.insert_default_admin(app.app_context(), ADMIN_USERNAME, ADMIN_PASSWORD)
 
     return app
 

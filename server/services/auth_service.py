@@ -12,7 +12,7 @@ class AuthService:
         user_data = NewUser(username=username, password=password)
         self.repository.register(user_data, app_context)
 
-    def insert_default_admin(self, app_context):
-        if not self.get_user("admin", "admin", app_context):
-            self.register("admin", "admin", app_context)
+    def insert_default_admin(self, app_context, username, password):
+        if not self.get_user(username, password, app_context):
+            self.register(username, password, app_context)
 
