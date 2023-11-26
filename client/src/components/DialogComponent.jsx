@@ -21,11 +21,11 @@ export default function DialogComponent({open, handleSubmit, text, error}) {
                         onClick={handleSubmit}
                         className="pb-4"
                     >
-                        <span className="text-primary">Cancel</span>
+                        <span className="text-primary">Затвори</span>
                     </Button>
-                    {/* <Button  onClick={handleSubmit}>
-                        <span className="text-xl">Confirm</span>
-                    </Button> */}
+                    <Button  onClick={handleSubmit}>
+                        <span className="text-xl">Потврди</span>
+                    </Button>
                     </DialogFooter>
                 </Dialog>
     </div>
