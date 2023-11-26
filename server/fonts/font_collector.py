@@ -2,9 +2,9 @@ import requests
 import os
 
 from fonts.font_parser import Font
-from fonts.font_matcher import match_fonts
-from services import FontService
+#from fonts.font_matcher import match_fonts
 
+from services.font_service import FontService
 
 FONTS_DIR = os.path.join(os.getcwd(), 'resources', 'fonts')
 
@@ -31,4 +31,4 @@ def save_fonts(font_service: FontService):
 def start_collector(GOOGLE_FONTS_API_KEY, font_service):
     fetch_fonts(GOOGLE_FONTS_API_KEY)
     save_fonts(font_service)
-    match_fonts(font_service)
+    #match_fonts(font_service)

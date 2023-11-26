@@ -1,58 +1,59 @@
 import threading
-from flask import jsonify, request
-from __main__ import app, font_service, GOOGLE_FONTS_API_KEY
+from flask import jsonify, request, Blueprint
 
 from fonts.font_collector import start_collector
 
 
-@app.route('/api/v1/fonts', methods=['GET'])
-def get_all_fonts():
-    fonts = font_service.get_all_fonts()
-    return jsonify([font.as_dict() for font in fonts])
+def create_font_blueprint(font_service, google_fonts_api_key):
+    font_bp = Blueprint('font', __name__)
 
-@app.route('/api/v1/fonts/<int:font_id>', methods=['GET'])
-def get_font_by_id(font_id):
-    font = font_service.get_font_by_id(font_id)
-    if font:
-        return jsonify(font.as_dict())
-    return jsonify({'error': 'Font not found'}), 404
+    @font_bp.route('/api/v1/fonts', methods=['GET'])
+    def get_all_fonts():
+        fonts = font_service.get_all_fonts()
+        return jsonify([font.as_dict() for font in fonts])
 
+    @font_bp.route('/api/v1/fonts/<int:font_id>', methods=['GET'])
+    def get_font_by_id(font_id):
+        font = font_service.get_font_by_id(font_id)
+        if font:
+            return jsonify(font.as_dict())
+        return jsonify({'error': 'Font not found'}), 404
 
-@app.route('/api/v1/fonts/name/<string:font_name>', methods=['GET'])
-def get_font_by_name():
-    font_name = request.args.get('name')
-    font = font_service.get_font_by_name(font_name)
-    if font:
-        return jsonify(font.as_dict())
-    return jsonify({'error': 'Font not found'}), 404
+    @font_bp.route('/api/v1/fonts/name/<string:font_name>', methods=['GET'])
+    def get_font_by_name():
+        font_name = request.args.get('name')
+        font = font_service.get_font_by_name(font_name)
+        if font:
+            return jsonify(font.as_dict())
+        return jsonify({'error': 'Font not found'}), 404
 
+    # random matching font pair
+    @font_bp.route('/api/v1/fonts/pair', methods=['GET'])
+    def get_font_pair():
+        font_pair = font_service.get_random_font_pair()
+        if font_pair:
+            return jsonify(font_pair)
+        return jsonify({'error': 'Font pair not found'}), 404
 
-# random matching font pair
-@app.route('/api/v1/fonts/pair', methods=['GET'])
-def get_font_pair():
-    font_pair = font_service.get_random_font_pair()
-    if font_pair:
-        return jsonify(font_pair)
-    return jsonify({'error': 'Font pair not found'}), 404
+    # font that matches the given font
+    @font_bp.route('/api/v1/fonts/pair/<int:font_id>', methods=['GET'])
+    def get_matching_font_pair(font_id):
+        font_pair = font_service.get_matching_font_pair(font_id)
+        if font_pair:
+            return jsonify(font_pair)
+        return jsonify({'error': 'Font pair not found'}), 404
 
+    # A threading event to signal task completion
+    task_running = threading.Event()
 
-# font that matches the given font
-@app.route('/api/v1/fonts/pair/<int:font_id>', methods=['GET'])
-def get_matching_font_pair(font_id):
-    font_pair = font_service.get_matching_font_pair(font_id)
-    if font_pair:
-        return jsonify(font_pair)
-    return jsonify({'error': 'Font pair not found'}), 404
+    def task_start_font_collector():
+        start_collector(google_fonts_api_key, font_service)
+        task_running.clear()
 
-# A threading event to signal task completion
-task_running = threading.Event()
-def task_start_font_collector():
-    start_collector(GOOGLE_FONTS_API_KEY, font_service)
-    task_running.clear()
-
+    return font_bp
 
 # # TODO: start collector on an api call
-# @app.route('/api/v1/fonts/collector', methods=['POST'])
+# @font_bp.route('/api/v1/fonts/collector', methods=['POST'])
 # # @jwt_required()
 # def start_font_collector():
 #     # current_user = get_jwt_identity()
@@ -69,8 +70,8 @@ def task_start_font_collector():
 #     threading.Thread(target=task_start_font_collector).start()
 #     return jsonify({'message': 'Font collector started'}), 200
 
-    
-# @app.route('/api/v1/fonts/collector', methods=['GET'])
+
+# @font_bp.route('/api/v1/fonts/collector', methods=['GET'])
 # # @jwt_required()
 # def get_font_collector_status():
 #     # current_user = get_jwt_identity()
