@@ -97,6 +97,25 @@ class AdminUser(db.Model):
     password = db.Column(db.String(50), nullable=False)
 
 
+class NewUser():
+    """
+    NewBlogPost represents the data required to create a new user.
+    ---
+    properties:
+      username:
+        type: string
+        maxLength: 50
+        description: The username of the admin user (unique).
+      password:
+        type: string
+        maxLength: 50
+        description: The password of the admin user.
+    """
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+
+
 class DiscordMessage:
     """
     DiscordMessage represents a message from Discord.

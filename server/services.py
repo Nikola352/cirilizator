@@ -1,5 +1,7 @@
 import requests
 
+from models import NewBlogPost, NewUser
+
 
 class BlogPostService:
     def __init__(self, repository):
@@ -14,7 +16,8 @@ class BlogPostService:
     def get_post_by_id(self, post_id):
         return self.repository.get_post_by_id(post_id)
 
-    def create_post(self, post_data):
+    def create_post(self, title, text, category, thumbnail):
+        post_data = NewBlogPost(title=title, text=text, category=category, thumbnail=thumbnail)
         return self.repository.create_post(post_data)
 
     def update_post(self, post_id, title, text):
@@ -30,6 +33,10 @@ class AdminUserService:
 
     def get_user_by_username(self, username):
         return self.repository.get_user_by_username(username)
+
+    def register(self, username, password):
+        user_data = NewUser(username=username, password=password)
+        self.repository.register(user_data)
 
 
 class GPTService:

@@ -10,7 +10,7 @@ from flasgger import Swagger, swag_from
 import discord_bot
 import transliteration_service
 from db import db, init_db
-from models import NewBlogPost, BlogPost, AdminUser, DiscordMessage
+from models import BlogPost, AdminUser
 from services import BlogPostService, AdminUserService, GPTService
 from repositories import BlogPostRepository, AdminUserRepository
 import threading
@@ -230,8 +230,7 @@ def create_post():
     text = data.get('text')
     category = data.get('category')
     thumbnail = data.get('thumbnail')
-    post_data = NewBlogPost(title=title, text=text, category=category, thumbnail=thumbnail)
-    new_post = blog_post_service.create_post(post_data)
+    new_post = blog_post_service.create_post(title, text, category, thumbnail)
 
     return jsonify(new_post.as_dict()), 201
 
@@ -440,6 +439,85 @@ def login():
         return jsonify({'error': 'Invalid credentials'}), 401
 
 
+@app.route('/api/v1/register', methods=['POST'])
+@jwt_required()
+@swag_from({
+    'summary': 'Register a new admin user',
+    'parameters': [
+        {
+            'name': 'Authorization',
+            'in': 'header',
+            'type': 'string',
+            'default': 'Bearer <access_token>',
+            'description': 'JWT token for authentication',
+            'required': True
+        },
+        {
+            'name': 'username',
+            'in': 'formData',
+            'type': 'string',
+            'required': True,
+            'description': 'Username for the new admin user',
+        },
+        {
+            'name': 'password',
+            'in': 'formData',
+            'type': 'string',
+            'required': True,
+            'description': 'Password for the new admin user',
+        },
+    ],
+    'responses': {
+        200: {
+            'description': 'User registration successful',
+            'schema': {'$ref': '#/definitions/AccessToken'}
+        },
+        401: {
+            'description': 'Unauthorized'
+        }
+    }
+})
+def register():
+    """
+    Register a new admin user
+    ---
+    parameters:
+      - name: Authorization
+        in: header
+        type: string
+        default: 'Bearer <access_token>'
+        description: JWT token for authentication
+        required: true
+      - name: username
+        in: formData
+        type: string
+        required: true
+        description: Username for the new admin user
+      - name: password
+        in: formData
+        type: string
+        required: true
+        description: Password for the new admin user
+    responses:
+      200:
+        description: User registration successful
+      401:
+        description: Unauthorized
+    """
+    current_user = get_jwt_identity()
+
+    # Check if the current user is the admin
+    if current_user != config.get('JWT', 'admin_username', raw=True):
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    username = request.json.get('username', None)
+    password = request.json.get('password', None)
+
+    admin_user_service.register(username, password)
+    access_token = create_access_token(identity=username)
+    return jsonify(access_token=access_token), 200
+
+
 @app.route('/api/v1/transliterate_text', methods=['POST'])
 @swag_from({
     'summary': 'Transliterate text',
@@ -465,7 +543,7 @@ def login():
         }
     }
 })
-def process_text():
+def transliterate_text():
     """
     Transliterate text
     ---
@@ -614,7 +692,7 @@ def transliterate_pdf():
         }
     }
 })
-def transliterate_txt():
+def transliterate_txt_file():
     """
     Transliterate TXT file
     ---
