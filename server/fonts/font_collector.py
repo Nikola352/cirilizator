@@ -31,8 +31,8 @@ class FontCollector:
     def save_fonts(self):
         for filename in os.listdir(FONTS_DIR):
             filepath = os.path.join(FONTS_DIR, filename)
-            font = Font(filepath)
-            print(font.font_family)
+            font = Font(filepath).set_category()
+            print("Saving font:", font.font_family)
             self.fonts.append(font)
 
     def start_collector(self, GOOGLE_FONTS_API_KEY, font_service):

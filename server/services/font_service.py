@@ -49,6 +49,7 @@ class FontService:
     def clear_table(self):
         self.repository.delete_all_fonts()
         self.font_match_repository.delete_all_font_matches()
+
     def start_collector(self):
         font_thread = threading.Thread(target=self.font_collector.task_start_font_collector, args=(self,))
         font_thread.start()
@@ -59,6 +60,7 @@ class FontService:
 
         # Now you can access the fonts collected by the thread
         collected_fonts = self.font_collector.fonts
+        self.clear_table()
         for font in collected_fonts:
             self.create_font(font)
 
