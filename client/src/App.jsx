@@ -1,7 +1,7 @@
 import './App.css'
 import { Button } from "@material-tailwind/react";
 import Home from './pages/Home'
-import {BrowserRouter as Router, Routes as Switch, Route, Routes} from "react-router-dom";
+import { BrowserRouter as Router, Routes as Switch, Route } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import Navbar from './components/Navbar'
 import Footer from './components/Footer';
@@ -31,25 +31,28 @@ function App() {
   })
   return (
     <Router>
-      <div className="App ">
-        {showNavFooter && <Navbar />}
-          <div className="content">
-            <Routes>
-              {console.log(window.location.pathname)}
-              <Route path="/" element={<Home />} />
-              <Route path="/razvoj" element={<Razvoj />} />
-              <Route path="/magazin" element={<Magazin />} />
-              <Route path="/resursi" element={<Resursi />} />
-              <Route path="/dizajn" element={<Dizajn />} />
-              {/* TODO */}
-              <Route path="/blogs/:id" element={<BlogPost />} />
-              <Route path="/zajednica" element={<Zajednica />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="/login" element={<Login />} />
-            </Routes>
-          </div>
-        {showNavFooter && <Footer />} 
-      </div>
+      <UserProvider>
+        <div className="App ">
+          {showNavFooter && <Navbar />}
+            <div className="content">
+              <Switch>
+                {console.log(window.location.pathname)}
+                <Route path="/" element={<Home />} />
+                <Route path="/razvoj" element={<Razvoj />} />
+                <Route path="/magazin" element={<Magazin />} />
+                <Route path="/resursi" element={<Resursi />} />
+                <Route path="/dizajn" element={<Dizajn />} />
+                {/* TODO */}
+                <Route path="/blog/:id" element={<BlogPost />} />
+                
+                <Route path="/zajednica" element={<Zajednica />} />
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/login" element={<Login />} />
+              </Switch>
+            </div>
+          {showNavFooter && <Footer />} 
+        </div>
+      </UserProvider>
     </Router>
   )
 }
