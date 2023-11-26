@@ -60,7 +60,7 @@ def create_auth_blueprint(auth_service, jwt_service):
         password = request.json.get('password', None)
 
         # Check if the user is an admin user
-        admin_user = auth_service.get_user(username, password, current_app.app_context)
+        admin_user = auth_service.get_user(username, password, current_app.app_context())
         if admin_user:
             access_token = create_access_token(identity=username)
             jwt_service.add_jwt_token(access_token)

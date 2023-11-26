@@ -8,7 +8,7 @@ class AuthRepository:
     def get_user(self, username, password, app_context):
         with app_context:
             user = self.model.query.filter_by(username=username).first()
-            if user and bcrypt.checkpw(password.encode('utf-8'), user.password_hash):
+            if user and bcrypt.checkpw(password.encode(), user.password.encode()):
                 return user
             return None
 
