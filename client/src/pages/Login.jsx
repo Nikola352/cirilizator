@@ -20,13 +20,13 @@ export default function Login(){
                     Sign In
                     </Typography>
                 </CardHeader>
-                <CardBody className="flex flex-col gap-4 ">
+                <CardBody className="flex flex-col gap-4 my-4">
                     <label className='text-primary-100 font-light'>E-пошта</label>
                     <Input  size="lg" className='my-4  p-6 w-96   shadow-lg rounded-xl bg-[#f2f2f275]'
                     placeholder="Унесите e-пошту."
                      />
                     <label className='text-primary-100 font-light'>Шифра</label>
-                    <Input  size="xl" className='my-4  p-6  w-96  shadow-lg rounded-xl bg-[#f2f2f275]'
+                    <Input  size="lg" className='my-4  p-6  w-96  shadow-lg rounded-xl bg-[#f2f2f275]'
                     placeholder="Унесите шифру." />
                     
                 </CardBody>

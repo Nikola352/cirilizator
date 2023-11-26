@@ -10,6 +10,7 @@ import Magazin from './pages/Magazin';
 import Resursi from './pages/Resursi';
 import Zajednica from './pages/Zajednica';
 import Login from './pages/Login';
+import Admin from './pages/Admin';
 
 
 
@@ -39,6 +40,7 @@ function App() {
               <Route path="/magazin" element={<Magazin />} />
               <Route path="/resursi" element={<Resursi />} />
               <Route path="/zajednica" element={<Zajednica />} />
+              <Route path="/admin" element={<Admin />} />
               <Route path="/login" element={<Login />} />
             </Switch>
           </div>
