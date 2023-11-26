@@ -8,6 +8,7 @@ import Footer from './components/Footer';
 import Razvoj from './pages/Razvoj';
 import Magazin from './pages/Magazin';
 import Resursi from './pages/Resursi';
+import Zajednica from './pages/Zajednica';
 import Login from './pages/Login';
 
 
@@ -37,6 +38,7 @@ function App() {
               <Route path="/razvoj" element={<Razvoj />} />
               <Route path="/magazin" element={<Magazin />} />
               <Route path="/resursi" element={<Resursi />} />
+              <Route path="/zajednica" element={<Zajednica />} />
               <Route path="/login" element={<Login />} />
             </Switch>
           </div>
