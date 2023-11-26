@@ -61,3 +61,5 @@ Add more backend docs
 Refactor some frontend code
 
 Make buttons for /login and /admin
+
+Implemented a button for localhost:5000/transliterate_pdf & localhost:5000/transliterate_txt
