@@ -2,7 +2,7 @@ from flask import jsonify, request, Blueprint
 from flask_jwt_extended import jwt_required
 
 
-def create_font_blueprint(font_service):
+def create_font_blueprint(font_service, jwt_service):
     font_bp = Blueprint('font', __name__)
 
     @font_bp.route('/api/v1/fonts', methods=['GET'])
@@ -42,30 +42,22 @@ def create_font_blueprint(font_service):
         return jsonify({'error': 'Font pair not found'}), 404
 
     @font_bp.route('/api/v1/fonts/collector', methods=['POST'])
-    # @jwt_required()
+    @jwt_required()
     def start_font_collector():
-        # current_user = get_jwt_identity()
+        jwt_token = request.headers.get('Authorization').split('Bearer ')[1]
+        if not jwt_service.has_jwt_token(jwt_token):
+            return jsonify({'error': 'Unauthorized'}), 401
 
-        # Check if the current user is the admin
-        # if current_user != config.get('JWT', 'admin_username', raw=True):
-        #     return jsonify({'error': 'Unauthorized'}), 401
-
-        # # single thread
-        # save_fonts(font_service)
-
-        # start new thread for the font collector
         font_service.start_collector()
 
         return jsonify({'message': 'Font collector started'}), 200
 
     @font_bp.route('/api/v1/fonts/collector', methods=['GET'])
-    # @jwt_required()
+    @jwt_required()
     def get_font_collector_status():
-        # current_user = get_jwt_identity()
-
-        # Check if the current user is the admin
-        # if current_user != config.get('JWT', 'admin_username', raw=True):
-        #     return jsonify({'error': 'Unauthorized'}), 401
+        jwt_token = request.headers.get('Authorization').split('Bearer ')[1]
+        if not jwt_service.has_jwt_token(jwt_token):
+            return jsonify({'error': 'Unauthorized'}), 401
 
         if font_service.is_collector_running():
             return jsonify({'status': 'running'}), 200

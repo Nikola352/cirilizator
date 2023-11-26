@@ -1,9 +1,9 @@
 from flasgger import swag_from
 from flask import jsonify, request, Blueprint
-from flask_jwt_extended import get_jwt_identity, jwt_required
+from flask_jwt_extended import jwt_required
 
 
-def create_blog_post_blueprint(blog_post_service, config):
+def create_blog_post_blueprint(blog_post_service, jwt_service):
     blog_post_bp = Blueprint('blog_post', __name__)
     
     @blog_post_bp.route('/api/v1/posts/all', methods=['GET'])
@@ -172,10 +172,8 @@ def create_blog_post_blueprint(blog_post_service, config):
           401:
             description: Unauthorized
         """
-        current_user = get_jwt_identity()
-
-        # Check if the current user is the admin
-        if current_user != config.get('JWT', 'admin_username', raw=True):
+        jwt_token = request.headers.get('Authorization').split('Bearer ')[1]
+        if not jwt_service.has_jwt_token(jwt_token):
             return jsonify({'error': 'Unauthorized'}), 401
 
         data = request.get_json()
@@ -246,10 +244,8 @@ def create_blog_post_blueprint(blog_post_service, config):
           404:
             description: Post not found
         """
-        current_user = get_jwt_identity()
-
-        # Check if the current user is the admin
-        if current_user != config.get('JWT', 'admin_username', raw=True):
+        jwt_token = request.headers.get('Authorization').split('Bearer ')[1]
+        if not jwt_service.has_jwt_token(jwt_token):
             return jsonify({'error': 'Unauthorized'}), 401
 
         data = request.get_json()
@@ -317,10 +313,8 @@ def create_blog_post_blueprint(blog_post_service, config):
           404:
             description: Post not found
         """
-        current_user = get_jwt_identity()
-
-        # Check if the current user is the admin
-        if current_user != config.get('JWT', 'admin_username', raw=True):
+        jwt_token = request.headers.get('Authorization').split('Bearer ')[1]
+        if not jwt_service.has_jwt_token(jwt_token):
             return jsonify({'error': 'Unauthorized'}), 401
 
         deleted = blog_post_service.delete_post(post_id)

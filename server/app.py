@@ -10,10 +10,12 @@ import threading
 
 from models.blog_post import BlogPost
 from models.font import Font
+from models.jwt_token import JWTToken
 from models.user import AdminUser
 from repositories.auth_repository import AuthRepository
 from repositories.blog_post_repository import BlogPostRepository
 from repositories.font_repository import FontRepository
+from repositories.jwt_repository import JWTRepository
 from routes.auth_routes import create_auth_blueprint
 from routes.blog_post_routes import create_blog_post_blueprint
 from routes.discord_routes import create_discord_blueprint
@@ -25,6 +27,7 @@ from services.auth_service import AuthService
 from services.blog_post_service import BlogPostService
 from services.font_service import FontService
 from services.gpt_service import GPTService
+from services.jwt_service import JWTService
 
 app = Flask(__name__)
 CORS(app)
@@ -53,19 +56,21 @@ discord_thread = threading.Thread(target=discord_bot_service.run_discord_bot)
 discord_thread.start()
 
 # Initialize the repositories and services
-auth_repository = AuthRepository(model=AdminUser, db=db)
-auth_service = AuthService(repository=auth_repository)
-blog_post_repository = BlogPostRepository(model=BlogPost, db=db)
+auth_repository = AuthRepository(AdminUser, db)
+auth_service = AuthService(auth_repository)
+blog_post_repository = BlogPostRepository(BlogPost, db)
 blog_post_service = BlogPostService(blog_post_repository)
-font_repository = FontRepository(model=Font, db=db)
+font_repository = FontRepository(Font, db)
 font_service = FontService(font_repository, db, GOOGLE_FONTS_API_KEY)
 gpt_service = GPTService(GPT_API_KEY, GPT_API_URL)
+jwt_repository = JWTRepository(JWTToken, db)
+jwt_service = JWTService(jwt_repository)
 
 # Register the route blueprints
-app.register_blueprint(create_auth_blueprint(auth_service))
-app.register_blueprint(create_blog_post_blueprint(blog_post_service, config))
+app.register_blueprint(create_auth_blueprint(auth_service, jwt_service))
+app.register_blueprint(create_blog_post_blueprint(blog_post_service, jwt_service))
 app.register_blueprint(create_discord_blueprint(discord_bot_service))
-app.register_blueprint(create_font_blueprint(font_service))
+app.register_blueprint(create_font_blueprint(font_service, jwt_service))
 app.register_blueprint(create_transliteration_blueprint(transliteration_service, gpt_service))
 
 if __name__ == "__main__":

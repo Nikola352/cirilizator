@@ -1,3 +1,6 @@
+from models.blog_post import NewBlogPost
+
+
 class BlogPostService:
     def __init__(self, repository):
         self.repository = repository

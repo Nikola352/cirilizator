@@ -3,7 +3,7 @@ from flask import jsonify, request, Blueprint
 from flask_jwt_extended import create_access_token, jwt_required
 
 
-def create_auth_blueprint(auth_service):
+def create_auth_blueprint(auth_service, jwt_service):
     auth_bp = Blueprint('auth', __name__)
 
     @auth_bp.route('/api/v1/login', methods=['POST'])
@@ -63,6 +63,7 @@ def create_auth_blueprint(auth_service):
         admin_user = auth_service.get_user_by_username(username, password)
         if admin_user:
             access_token = create_access_token(identity=username)
+            jwt_service.add_jwt_token(access_token)
             return jsonify(access_token=access_token), 200
         else:
             return jsonify({'error': 'Invalid credentials'}), 401
@@ -132,12 +133,12 @@ def create_auth_blueprint(auth_service):
           401:
             description: Unauthorized
         """
-        username = request.json.get('username', None)
-        password = request.json.get('password', None)\
-
-        if login(username, password) == (jsonify({'error': 'Invalid credentials'}), 401):
+        jwt_token = request.headers.get('Authorization').split('Bearer ')[1]
+        if not jwt_service.has_jwt_token(jwt_token):
             return jsonify({'error': 'Unauthorized'}), 401
 
+        username = request.json.get('username', None)
+        password = request.json.get('password', None)
         auth_service.register(username, password)
         access_token = create_access_token(identity=username)
         return jsonify(access_token=access_token), 200
