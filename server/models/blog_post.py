@@ -32,10 +32,10 @@ class BlogPost(db.Model):
     __tablename__ = 'blog_posts'
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(50), nullable=False)
+    title = db.Column(db.Text, nullable=False)
     text = db.Column(db.Text, nullable=False)
-    category = db.Column(db.String(50), nullable=False)
-    thumbnail = db.Column(db.String(255))
+    category = db.Column(db.Text, nullable=False)
+    thumbnail = db.Column(db.Text)
 
     def as_dict(self):
         return {column.name: getattr(self, column.name) for column in self.__table__.columns}
