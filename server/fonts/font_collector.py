@@ -7,7 +7,6 @@ import os
 from fonts.font_parser import Font
 from fonts.font_matcher import match_fonts
 
-# from fonts.font_matcher import match_fonts
 
 FONTS_DIR = os.path.join(os.getcwd(), 'resources', 'fonts')
 
@@ -35,16 +34,12 @@ class FontCollector:
             filepath = os.path.join(FONTS_DIR, filename)
             font = Font(filepath).set_category()
             print("Saving font:", font.font_family)
-            self.fonts.append(font)
-            font = Font(filepath)
-            print(font.font_family)
             self.font_queue.put(font)
 
-    def start_collector(self, GOOGLE_FONTS_API_KEY, font_service):
-        self.fetch_fonts(GOOGLE_FONTS_API_KEY)
+    def start_collector(self, GOOGLE_FONTS_API_KEY):
+        fetch_fonts(GOOGLE_FONTS_API_KEY)
         self.save_fonts()
-        match_fonts(font_service)
 
-    def task_start_font_collector(self, font_service):
-        self.start_collector(self.google_fonts_api_key, font_service)
+    def task_start_font_collector(self):
+        self.start_collector(self.google_fonts_api_key)
         self.task_running.clear()

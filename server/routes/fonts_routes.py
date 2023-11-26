@@ -48,7 +48,7 @@ def create_font_blueprint(font_service, jwt_service):
         if not jwt_service.has_jwt_token(jwt_token):
             return jsonify({'error': 'Unauthorized'}), 401
 
-        font_service.start_collector(font_service)
+        font_service.start_collector()
 
         return jsonify({'message': 'Font collector started'}), 200
 

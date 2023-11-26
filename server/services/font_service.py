@@ -1,19 +1,23 @@
 import threading
 
 from fonts.font_collector import FontCollector
-
+from fonts.font_matcher import match_fonts
 
 from repositories.font_repository import FontRepository
 from repositories.font_match_repository import FontMatchRepository
 
 
 class FontService:
-    def __init__(self, repository: FontRepository, font_match_repository: FontMatchRepository, db, google_fonts_api_key):
+    def __init__(self,
+                 repository: FontRepository,
+                 font_match_repository: FontMatchRepository,
+                 db,
+                 google_fonts_api_key):
         self.repository = repository
         self.font_match_repository = font_match_repository
         self.db = db
         self.font_collector = FontCollector(google_fonts_api_key)
-        self.font_collector.start_collector(google_fonts_api_key, self)
+        self.font_collector.start_collector(google_fonts_api_key)
         self.font_queue = self.font_collector.font_queue
 
     def get_all_fonts(self):
@@ -52,13 +56,15 @@ class FontService:
         self.font_match_repository.delete_all_font_matches()
 
     def start_collector(self):
-        font_thread = threading.Thread(target=self.font_collector.task_start_font_collector, args=(self,))
+        font_thread = threading.Thread(target=self.font_collector.task_start_font_collector)
         font_thread.start()
         self.font_collector.task_running.set()
 
         while not self.font_queue.empty():
             font = self.font_queue.get()
             self.create_font(font)
+
+        match_fonts(self)
 
     def is_collector_running(self):
         return self.font_collector.task_running.is_set()
