@@ -38,7 +38,7 @@ class FontCollector:
     def start_collector(self, GOOGLE_FONTS_API_KEY, font_service):
         self.fetch_fonts(GOOGLE_FONTS_API_KEY)
         self.save_fonts()
-        #match_fonts(font_service)
+        match_fonts(font_service)
 
     def task_start_font_collector(self, font_service):
         self.start_collector(self.google_fonts_api_key, font_service)
