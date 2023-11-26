@@ -1,3 +1,5 @@
+import os
+
 from flask_cors import CORS
 from configparser import ConfigParser
 
@@ -5,9 +7,10 @@ from flask import Flask, jsonify, request, send_file
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
 
 import discord_bot
+import transliteration_service
 from db import db, init_db
 from models import NewBlogPost, BlogPost, AdminUser
-from services import BlogPostService, AdminUserService, GPTService, TransliterationService
+from services import BlogPostService, AdminUserService, GPTService
 from repositories import BlogPostRepository, AdminUserRepository
 import threading
 
@@ -41,7 +44,6 @@ blog_post_service = BlogPostService(repository)
 admin_user_repository = AdminUserRepository(model=AdminUser, db=db)
 admin_user_service = AdminUserService(repository=admin_user_repository)
 gpt_service = GPTService(GPT_API_KEY, GPT_API_URL)
-transliteration_service = TransliterationService()
 
 @app.route('/api/v1/posts', methods=['GET'])
 def get_all_posts():
@@ -158,13 +160,43 @@ def transliterate_pdf():
     if file.filename == '':
         return "No selected file"
 
-    if file:
-        edited_file_path = transliteration_service.get_edited_file_path(file)
+    if file and file.filename.endswith(".pdf"):
+        edited_file_path = transliteration_service.transliterate_pdf(file)
 
         if edited_file_path is None:
             return "Error: file path is None"
 
-        return send_file(edited_file_path, as_attachment=True, download_name="edited_file.pdf", mimetype="application/pdf")
+        response = send_file(edited_file_path, as_attachment=True, download_name="edited_file.pdf", mimetype="application/pdf")
+
+        # Delete files after sending
+        os.remove("uploads" + os.sep + file.filename)
+        os.remove(edited_file_path)
+
+        return response
+    return "Invalid file format. Please upload a .pdf file."
+
+
+@app.route('/api/v1/transliterate_txt', methods=['POST'])
+def transliterate_txt():
+    if 'file' not in request.files:
+        return "No file part"
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return "No selected file"
+
+    if file and file.filename.endswith('.txt'):
+        edited_file_path = transliteration_service.transliterate_txt(file)
+
+        response = send_file(edited_file_path, as_attachment=True, download_name="edited_file.txt", mimetype="text/plain")
+
+        # Delete files after sending
+        os.remove(edited_file_path)
+
+        return response
+
+    return "Invalid file format. Please upload a .txt file."
 
 
 if __name__ == "__main__":
