@@ -29,7 +29,7 @@ const useRequest = (url, method) => {
         }
     }
 
-    return { sendRequest, isPending, error, result, writtenData: sentData }
+    return { sendRequest, isPending, error, result, sentData }
 }
 
 export default useRequest;
