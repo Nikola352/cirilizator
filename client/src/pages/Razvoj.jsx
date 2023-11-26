@@ -10,7 +10,6 @@ export default function Razvoj() {
 
     useEffect(() => {
         BackendService.getBlogPosts().then((result) => {
-            console.log(result);
             setBlogPosts(result.filter((blogPost) => blogPost.category === "info"));
         });
     }, []);
@@ -27,7 +26,7 @@ export default function Razvoj() {
             </div>
             <div className="cards flex max-w-7xl mx-auto flex-row gap-16">
                 {blogPosts.slice(0, 3).map((blog) => (
-                    <BlogCard blog={blog} key={blog.key}/>
+                    <BlogCard blog={blog} key={blog.id}/>
                     ))}
             </div>
             <div className="btn-container my-8 flex justify-center " >

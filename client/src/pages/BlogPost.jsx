@@ -1,12 +1,24 @@
 
 import Markdown from 'react-markdown';
-export default function BlogPost({title, category, thumbnail, description}){
+import {useEffect, useState} from "react";
+import { useLocation, useParams } from "react-router-dom";
+
+export default function BlogPost() {
+    const { id } = useParams();
+    const location = useLocation();
+    const [blog, setBlog] = useState(location.state?.blog || {});
+
+    useEffect(() => {
+        // Assuming you have received the blog data as a prop
+        setBlog(location.state?.blog || {});
+    }, [location.state]);
+
     return(
             <div className="max-w-7xl mx-auto flex justify-center flex-col text-center">
-                <h1 className='px-32 text-3xl font-serif'>{title}</h1>
-                <h2 className='paragraph px-32 text-xs my-4'>Category: <span className='font-semibold'>{category}</span></h2>
-                <img src={thumbnail}  className="w-1/2 mx-auto h-40 object-cover object-center"/>
-                <Markdown className="markdown px-24 my-4">{description}</Markdown>
+                <h1 className='px-32 text-3xl font-serif'>{blog.title}</h1>
+                <h2 className='paragraph px-32 text-xs my-4'>Категорија: <span className='font-semibold'>{blog.category}</span></h2>
+                <img src={blog.thumbnail}  className="w-1/2 mx-auto h-40 object-cover object-center" alt="Blog post thumbnail"/>
+                <Markdown className="markdown px-24 my-4">{blog.description}</Markdown>
             </div>
     )
 }

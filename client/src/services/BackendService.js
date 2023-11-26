@@ -34,7 +34,6 @@ class BackendService {
                 throw new Error('API endpoint not specified in the environment variables.');
             }
 
-            console.log("path: " + apiEndpoint + 'posts/all');
             const response = await fetch(apiEndpoint + 'posts/all', {
                 method: 'GET',
             });
@@ -44,7 +43,6 @@ class BackendService {
             }
 
             const data = await response.json();
-            console.table(data);
             return data;
         } catch (error) {
             console.error('Error:', error);

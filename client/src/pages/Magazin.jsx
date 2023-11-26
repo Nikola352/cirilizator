@@ -14,7 +14,6 @@ export default function Magazin(){
 
     useEffect(() => {
         BackendService.getBlogPosts().then((result) => {
-            console.log(result);
             setBlogPosts(result);
         });
     }, []);

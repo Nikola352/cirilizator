@@ -5,26 +5,23 @@ import {
     Typography,
   } from "@material-tailwind/react";
 import {useEffect, useState} from "react";
+import {Link} from "react-router-dom";
 
 export default function BlogCard(props) {
     const [imageSrc, setImageSrc] = useState("../assets/default_blog_post_thumbnail.png");
 
-    useEffect(() => {
-        console.log("default src: " + imageSrc);
-    })
     useEffect(() => {
         // Attempt to load the actual image
         const img = new Image();
         img.onload = () => {
             // If the image is successfully loaded, update the image source
             setImageSrc(props.blog.thumbnail);
-            console.log("updated src: ");
         };
         img.src = props.blog.thumbnail;
     }, [props.blog.thumbnail]);
 
     return(
-        <a href={`/blog/${props.key}`}>
+        <Link to={`/blogs/${props.blog.id}`} state={{ blog: props.blog }}>
             <Card className="max-w-[24rem] overflow-hidden shadow-xl cursor-pointer">
                 <CardHeader
                     floated={false}
@@ -50,6 +47,6 @@ export default function BlogCard(props) {
                 </CardBody>
                 
             </Card>
-        </a>
+        </Link>
     )
 }
