@@ -9,6 +9,7 @@ import Preview from '../components/Preview';
 export default function Admin() {
     const [open, setOpen] = useState(false);
     const [error, setError] = useState(true);
+    const [errors, setErrors] = useState({});
 
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState("");
@@ -30,7 +31,28 @@ export default function Admin() {
         }
     ];
     const handleSubmit = () => {
-        setOpen(!open);
+        if(title === "" || category === "" || image === "" || description === ""){
+            setErrors({
+                title: title === "" ? "Наслов је обавезан" : null,
+                category: category === "" ? "Категорија је обавезна" : null,
+                image: image === "" ? "Слика је обавезна" : null,
+                description: description === "" ? "Опис је обавезан" : null,
+            })
+            setError(true);
+            return;
+        }
+        else{
+            setErrors({
+                title: null,
+                category: null,
+                image: null,
+                description: null,
+            })
+            setError(false);
+            setOpen(!open);
+        }
+        
+        // setOpen(!open);
     }
     const successMessage = "Успешно сте креирали нови блог!"
     const errorMessage = "Дошло је до грешке приликом креирања новог блога!"
@@ -40,9 +62,13 @@ export default function Admin() {
             <div className="flex flex-wrap flex-row  justify-between gap-4">
                 <div className="inputs  max-w-[700px] w-full">
                     <TextInput label="Наслов" placeholder="Унесите наслов" type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+                    {errors.title && <p className="text-red-500 text-sm">{errors.title}</p>}
                     <TextInput label="Категорија" placeholder="Унесите категорију" type="dropdown" options={options} value={category} onChange={(id) => setCategory(id)}/>
+                    {errors.category && <p className="text-red-500 text-sm">{errors.category}</p>}
                     <TextInput label="Слика" placeholder="Унесите слику" type="text" value={image} onChange={(e) => setImage(e.target.value)}/>
+                    {errors.image && <p className="text-red-500 text-sm">{errors.image}</p>}
                     <TextInput label="Опис" placeholder="Унесите опис" type="textarea" value={description} onChange={(e) => setDescription(e.target.value)} />
+                    {errors.description && <p className="text-red-500 text-sm">{errors.description}</p>}
                     <div className="btn-container block">
                         <CTA text={"Сачувај"} handleSubmit={handleSubmit} img={null}/>
                     </div>
