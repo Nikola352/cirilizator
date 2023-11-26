@@ -13,3 +13,4 @@ bs4~=0.0.1
 beautifulsoup4~=4.12.2
 fonttools~=4.45.1
 SQLAlchemy~=2.0.23
+bcrypt~=4.0.1
