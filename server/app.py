@@ -10,6 +10,7 @@ import threading
 
 from models.blog_post import BlogPost
 from models.font import Font
+from models.font_match import FontMatch
 from models.jwt_token import JWTToken
 from models.user import AdminUser
 from repositories.auth_repository import AuthRepository
@@ -21,7 +22,6 @@ from routes.blog_post_routes import create_blog_post_blueprint
 from routes.discord_routes import create_discord_blueprint
 from routes.fonts_routes import create_font_blueprint
 from routes.transliteration_routes import create_transliteration_blueprint
-from models.font_match import FontMatch
 from repositories.font_match_repository import FontMatchRepository
 from services import discord_bot_service
 from services import transliteration_service
@@ -31,50 +31,67 @@ from services.font_service import FontService
 from services.gpt_service import GPTService
 from services.jwt_service import JWTService
 
-app = Flask(__name__)
-CORS(app)
-Swagger(app, template_file='swagger_definitions.yaml')
 
-config = ConfigParser()
-config.read('config.conf')
+def create_app():
+    app = Flask(__name__)
+    CORS(app)
+    Swagger(app, template_file='swagger_definitions.yaml')
 
-# Configure Flask-SQLAlchemy
-app.config['SQLALCHEMY_DATABASE_URI'] = config.get('Database', 'url', raw=True)
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    config = ConfigParser()
+    config.read('config.conf')
 
-# Configure Flask-JWT-Extended
-app.config['JWT_SECRET_KEY'] = config.get('JWT', 'secret_key', raw=True)
-jwt = JWTManager(app)
+    # Configure Flask-SQLAlchemy
+    app.config['SQLALCHEMY_DATABASE_URI'] = config.get('Database', 'url', raw=True)
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    # Configure the pool_pre_ping option
+    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+        'pool_pre_ping': True
+    }
 
-GPT_API_KEY = config.get('GPT', 'api_key')
-GPT_API_URL = 'https://api.openai.com/v1/engines/gpt-3.5-turbo/completions'
+    # Configure Flask-JWT-Extended
+    app.config['JWT_SECRET_KEY'] = config.get('JWT', 'secret_key', raw=True)
+    jwt = JWTManager(app)
 
-GOOGLE_FONTS_API_KEY = config.get('GoogleFonts', 'api_key', raw=True)
+    GPT_API_KEY = config.get('GPT', 'api_key')
+    GPT_API_URL = 'https://api.openai.com/v1/engines/gpt-3.5-turbo/completions'
 
-init_db(app)
+    GOOGLE_FONTS_API_KEY = config.get('GoogleFonts', 'api_key', raw=True)
 
-# Start the bot in a separate thread
-discord_thread = threading.Thread(target=discord_bot_service.run_discord_bot)
-discord_thread.start()
+    init_db(app)
 
-# Initialize the repositories and services
-auth_repository = AuthRepository(AdminUser, db)
-auth_service = AuthService(auth_repository)
-blog_post_repository = BlogPostRepository(BlogPost, db)
-blog_post_service = BlogPostService(blog_post_repository)
-font_repository = FontRepository(Font, db)
-font_match_repository = FontMatchRepository(model=FontMatch, db=db)
-font_service = FontService(font_repository, font_match_repository, db, GOOGLE_FONTS_API_KEY)
-gpt_service = GPTService(GPT_API_KEY, GPT_API_URL)
-jwt_repository = JWTRepository(JWTToken, db)
-jwt_service = JWTService(jwt_repository)
+    # Start the bot in a separate thread
+    discord_thread = threading.Thread(target=discord_bot_service.run_discord_bot)
+    discord_thread.start()
 
-# Register the route blueprints
-app.register_blueprint(create_auth_blueprint(auth_service, jwt_service))
-app.register_blueprint(create_blog_post_blueprint(blog_post_service, jwt_service))
-app.register_blueprint(create_discord_blueprint(discord_bot_service))
-app.register_blueprint(create_font_blueprint(font_service, jwt_service))
-app.register_blueprint(create_transliteration_blueprint(transliteration_service, gpt_service))
+    # Initialize the repositories and services
+    auth_repository = AuthRepository(AdminUser, db)
+    auth_service = AuthService(auth_repository)
+    blog_post_repository = BlogPostRepository(BlogPost, db)
+    blog_post_service = BlogPostService(blog_post_repository)
+    font_repository = FontRepository(Font, db)
+    font_match_repository = FontMatchRepository(FontMatch, db)
+    font_service = FontService(font_repository, font_match_repository, db, GOOGLE_FONTS_API_KEY)
+    gpt_service = GPTService(GPT_API_KEY, GPT_API_URL)
+    jwt_repository = JWTRepository(JWTToken, db)
+    jwt_service = JWTService(jwt_repository)
+
+    # Register the route blueprints
+    app.register_blueprint(create_auth_blueprint(auth_service, jwt_service))
+    app.register_blueprint(create_blog_post_blueprint(blog_post_service, jwt_service))
+    app.register_blueprint(create_discord_blueprint(discord_bot_service))
+    app.register_blueprint(create_font_blueprint(font_service, jwt_service))
+    app.register_blueprint(create_transliteration_blueprint(transliteration_service, gpt_service))
+
+    #@app._before_first_request
+    #def before_request():
+    #    font_service.start_collector()
+    font_service.start_collector(app.app_context())
+
+    return app
+
+
+app = create_app()
+
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,4 +1,4 @@
-from flask import jsonify, request, Blueprint
+from flask import jsonify, request, Blueprint, current_app
 from flask_jwt_extended import jwt_required
 
 
@@ -36,7 +36,7 @@ def create_font_blueprint(font_service, jwt_service):
     # font that matches the given font
     @font_bp.route('/api/v1/fonts/pair/<string:font_name>', methods=['GET'])
     def get_matching_font(font_name):
-        font = font_service.get_matching_font(font_name)
+        font = font_service.get_matching_font(font_name, current_app.app_context())
         if font:
             return jsonify(font.as_dict())
         return jsonify({'error': 'Font not found'}), 404
@@ -48,7 +48,7 @@ def create_font_blueprint(font_service, jwt_service):
         if not jwt_service.has_jwt_token(jwt_token):
             return jsonify({'error': 'Unauthorized'}), 401
 
-        font_service.start_collector()
+        font_service.start_collector(current_app.app_context())
 
         return jsonify({'message': 'Font collector started'}), 200
 

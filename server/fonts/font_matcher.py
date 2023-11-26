@@ -21,7 +21,7 @@ def cosine_similarity(vector1, vector2):
     return np.dot(vector1, vector2) / (np.linalg.norm(vector1) * np.linalg.norm(vector2))
 
 
-def match_fonts(font_service):
+def match_fonts(font_service, app_context):
     fonts = load_fonts()
     print(len(fonts))
 
@@ -44,4 +44,4 @@ def match_fonts(font_service):
 
         font_service.new_match(font.font_family,
                                serif_fonts[sorted_similarities[idx][1]].font_family,
-                               sorted_similarities[idx][0])
+                               sorted_similarities[idx][0], app_context)
