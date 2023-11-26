@@ -92,7 +92,7 @@ export default function NavbarDefault() {
             fill="#8338ec"
           />
         </svg>
-        <a href="#" className="flex items-center">
+        <a href="/magazin" className="flex items-center">
             Магазин
         </a>
       </Typography>

@@ -46,7 +46,7 @@ export default function Footer() {
             <li>
             <Typography
                 as="a"
-                href="#"
+                href="/magazin"
                 color="blue-gray"
                 className="font-normal transition-colors hover:text-primary focus:text-primary"
             >

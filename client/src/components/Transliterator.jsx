@@ -78,7 +78,7 @@ const Transliterator = () => {
                 </label>
             </div>
             <div>
-        <Textarea className='my-4  p-8 w-full h-60 shadow-lg rounded-xl bg-[#f2f2f275]'
+        <Textarea className='my-4  p-8 w-full h-80 shadow-lg rounded-xl bg-[#f2f2f275]'
             placeholder="Унесите текст на латиници."
             value={inputText}
             onChange={handleInputChange}
@@ -91,7 +91,7 @@ const Transliterator = () => {
             </div>
             <div>
         <Textarea
-            className='my-4 w-full  p-8 h-60 shadow-lg rounded-xl bg-[#f2f2f275]'
+            className='my-4 w-full  p-8 h-80 shadow-lg rounded-xl bg-[#f2f2f275]'
             placeholder="Транслитериран текст ће се овде појавити."
             value={outputText}
             readOnly

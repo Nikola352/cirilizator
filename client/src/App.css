@@ -101,6 +101,7 @@
   -webkit-user-select: none;
   touch-action: manipulation;
   height: 4rem;
+  max-width: 140px;
 }
 
 .button-35:hover {
