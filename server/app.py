@@ -7,6 +7,7 @@ from flasgger import Swagger
 
 from database.db import db, init_db
 import threading
+import os
 
 from models.blog_post import BlogPost
 from models.font import Font
@@ -88,6 +89,13 @@ def create_app():
     font_service.start_collector(app.app_context())
     auth_service.insert_default_admin(app.app_context(), ADMIN_USERNAME, ADMIN_PASSWORD)
 
+    fonts_folder_path = os.path.join(os.getcwd(), 'resources', 'fonts')
+    if not os.path.exists(fonts_folder_path):
+        os.makedirs(fonts_folder_path)
+
+    uploads_path = os.path.join(os.getcwd(), 'uploads')
+    if not os.path.exists(uploads_path):
+        os.makedirs(uploads_path)
     return app
 
 
