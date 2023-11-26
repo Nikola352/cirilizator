@@ -11,12 +11,13 @@ class FontRepository:
 
     def get_font_by_id(self, font_id):
         return self.model.query.get(font_id)
-
+    
     def get_font_by_name(self, font_name):
         return self.model.query.filter_by(font_family=font_name).first()
 
     def create_font(self, font_data):
         new_font = self.model(
+            category=font_data.category,
             font_family=font_data.font_family,
             font_subfamily=font_data.font_subfamily,
             font_full_name=font_data.font_full_name,
@@ -43,6 +44,18 @@ class FontRepository:
             self.db.session.commit()
             return True
         return False
-
+    
     def get_random_font(self):
         return self.model.query.order_by(func.random()).first()
+    
+    def delete_all_fonts(self):
+        try:
+            self.model.query.delete()
+            self.db.session.commit()
+            return True
+        except Exception as e:
+            # Handle exceptions if needed
+            print(f"Error deleting all fonts: {str(e)}")
+            self.db.session.rollback()
+            return False
+        
