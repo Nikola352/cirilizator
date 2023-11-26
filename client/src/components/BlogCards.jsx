@@ -24,30 +24,32 @@ export default function BlogCard(props) {
     }, [props.blog.thumbnail]);
 
     return(
-        <Card className="max-w-[24rem] overflow-hidden shadow-xl cursor-pointer">
-            <CardHeader
-                floated={false}
-                shadow={false}
-                color="transparent"
-                className="m-0 rounded-none"
-            >
-                <img
-                src={imageSrc}
-                alt="Blog post thumbnail"
-                // onError={(event) => {
-                //     event.target.src = "../assets/default_blog_post_thumbnail.png";
-                // }}
-                />
-            </CardHeader>
-            <CardBody className="px-4 py-8">
-                <Typography variant="h4" className="text-primary-100">
-                {props.blog.title}
-                </Typography>
-                <Typography variant="small"  className="mt-3 font-normal text-primary-100">
-                {props.blog.text}
-                </Typography>
-            </CardBody>
-            
-        </Card>
+        <a href={`/blog/${props.key}`}>
+            <Card className="max-w-[24rem] overflow-hidden shadow-xl cursor-pointer">
+                <CardHeader
+                    floated={false}
+                    shadow={false}
+                    color="transparent"
+                    className="m-0 rounded-none"
+                >
+                    <img
+                    src={imageSrc}
+                    alt="Blog post thumbnail"
+                    // onError={(event) => {
+                    //     event.target.src = "../assets/default_blog_post_thumbnail.png";
+                    // }}
+                    />
+                </CardHeader>
+                <CardBody className="px-4 py-8">
+                    <Typography variant="h4" className="text-primary-100">
+                    {props.blog.title}
+                    </Typography>
+                    <Typography variant="small"  className="mt-3 font-normal text-primary-100">
+                    {props.blog.text}
+                    </Typography>
+                </CardBody>
+                
+            </Card>
+        </a>
     )
 }

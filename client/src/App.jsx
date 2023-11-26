@@ -12,6 +12,7 @@ import Zajednica from './pages/Zajednica';
 import Login from './pages/Login';
 import Admin from './pages/Admin';
 import Dizajn from './pages/Dizajn';
+import BlogPost from './pages/BlogPost';
 
 
 
@@ -40,6 +41,9 @@ function App() {
               <Route path="/magazin" element={<Magazin />} />
               <Route path="/resursi" element={<Resursi />} />
               <Route path="/dizajn" element={<Dizajn />} />
+              {/* TODO */}
+              <Route path="/blog/:id" element={<BlogPost />} />
+              
               <Route path="/zajednica" element={<Zajednica />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/login" element={<Login />} />
