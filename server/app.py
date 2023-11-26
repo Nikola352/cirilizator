@@ -52,26 +52,21 @@ init_db(app)
 discord_thread = threading.Thread(target=discord_bot_service.run_discord_bot)
 discord_thread.start()
 
-
 # Initialize the repositories and services
 auth_repository = AuthRepository(model=AdminUser, db=db)
 auth_service = AuthService(repository=auth_repository)
 blog_post_repository = BlogPostRepository(model=BlogPost, db=db)
 blog_post_service = BlogPostService(blog_post_repository)
 font_repository = FontRepository(model=Font, db=db)
-font_service = FontService(font_repository)
+font_service = FontService(font_repository, db, GOOGLE_FONTS_API_KEY)
 gpt_service = GPTService(GPT_API_KEY, GPT_API_URL)
 
 # Register the route blueprints
 app.register_blueprint(create_auth_blueprint(auth_service))
 app.register_blueprint(create_blog_post_blueprint(blog_post_service, config))
 app.register_blueprint(create_discord_blueprint(discord_bot_service))
-app.register_blueprint(create_font_blueprint(font_service, GOOGLE_FONTS_API_KEY))
+app.register_blueprint(create_font_blueprint(font_service))
 app.register_blueprint(create_transliteration_blueprint(transliteration_service, gpt_service))
 
-
 if __name__ == "__main__":
-    # TODO: start collector on an api call
-    # with app.app_context():
-    #     start_collector(GOOGLE_FONTS_API_KEY, font_service)
     app.run(debug=True)

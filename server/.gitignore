@@ -1,5 +1,5 @@
 config.conf
-resources
+resources/fonts/*
 __pycache__
 *.py[cod]
 fitz

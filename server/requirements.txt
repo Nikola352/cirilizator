@@ -7,5 +7,9 @@ configparser~=6.0.0
 requests~=2.31.0
 pymupdf
 pymupdf-fonts
-flasgger
-numpy
+flasgger~=0.9.7.1
+numpy~=1.26.2
+bs4~=0.0.1
+beautifulsoup4~=4.12.2
+fonttools~=4.45.1
+SQLAlchemy~=2.0.23
