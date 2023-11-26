@@ -82,10 +82,8 @@ def create_app():
     app.register_blueprint(create_font_blueprint(font_service, jwt_service))
     app.register_blueprint(create_transliteration_blueprint(transliteration_service, gpt_service))
 
-    #@app._before_first_request
-    #def before_request():
-    #    font_service.start_collector()
     font_service.start_collector(app.app_context())
+    auth_service.insert_default_admin(app.app_context())
 
     return app
 

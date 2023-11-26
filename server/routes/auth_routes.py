@@ -1,5 +1,5 @@
 from flasgger import swag_from
-from flask import jsonify, request, Blueprint
+from flask import jsonify, request, Blueprint, current_app
 from flask_jwt_extended import create_access_token, jwt_required
 
 
@@ -60,7 +60,7 @@ def create_auth_blueprint(auth_service, jwt_service):
         password = request.json.get('password', None)
 
         # Check if the user is an admin user
-        admin_user = auth_service.get_user_by_username(username, password)
+        admin_user = auth_service.get_user(username, password, current_app.app_context)
         if admin_user:
             access_token = create_access_token(identity=username)
             jwt_service.add_jwt_token(access_token)
@@ -139,7 +139,7 @@ def create_auth_blueprint(auth_service, jwt_service):
 
         username = request.json.get('username', None)
         password = request.json.get('password', None)
-        auth_service.register(username, password)
+        auth_service.register(username, password, current_app.app_context())
         access_token = create_access_token(identity=username)
         return jsonify(access_token=access_token), 200
 
