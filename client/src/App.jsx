@@ -6,6 +6,8 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer';
 import Razvoj from './pages/Razvoj';
 import Magazin from './pages/Magazin';
+import Resursi from './pages/Resursi';
+
 
 function App() {
   return (
@@ -17,6 +19,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/razvoj" element={<Razvoj />} />
               <Route path="/magazin" element={<Magazin />} />
+              <Route path="/resursi" element={<Resursi />} />
             </Switch>
           </div>
         <Footer /> 

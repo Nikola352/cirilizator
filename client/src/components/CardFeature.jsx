@@ -4,9 +4,12 @@ import {
     CardBody,
     Typography,
     Button,
+
   } from "@material-tailwind/react";
 export default function CardFeature(props) {
     return (
+        
+        <a href={props.path}>
         <Card className="w-full  max-w-7xl 
             card mx-auto sm:flex-row flex-col shadow-xl">
             <CardBody className="my-8 pr-8">
@@ -16,7 +19,7 @@ export default function CardFeature(props) {
                 <Typography color="gray" className="mb-4 text-sm font-normal text-primary-100">
                 {props.paragraph}
                 </Typography>
-                <a href="#" className="inline-block">
+                <a href={props.path} className="inline-block">
                 <Button variant="text" className="flex mb-4 p-0 items-center gap-2 text-primary">
                     Learn More
                     <svg
@@ -47,7 +50,10 @@ export default function CardFeature(props) {
                 className="h-full w-full object-cover "
                 />
             </CardHeader>
+
+                
             
         </Card>
+            </a>
     );
 }

@@ -112,3 +112,13 @@
   box-shadow: var(--primary-color) 0 0 0 2px, transparent 0 0 0 0;
   color: var(--primary-color);
 }
+.link-section{
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-top: 2rem;
+}
+.link{
+  font-weight: 400;
+  color: var(--primary-color);
+  padding-left: .4rem;
+}

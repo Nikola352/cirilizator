@@ -26,7 +26,7 @@ export default function Footer() {
             <li>
             <Typography
                 as="a"
-                href="#"
+                href="/dizajn"
                 color="blue-gray"
                 className="font-normal transition-colors hover:text-primary focus:text-primary"
             >
@@ -36,7 +36,7 @@ export default function Footer() {
             <li>
             <Typography
                 as="a"
-                href="#"
+                href="/resursi"
                 color="blue-gray"
                 className="font-normal transition-colors hover:text-primary focus:text-primary"
             >
@@ -56,7 +56,7 @@ export default function Footer() {
             <li>
             <Typography
                 as="a"
-                href="#"
+                href="/zajednica"
                 color="blue-gray"
                 className="font-normal transition-colors hover:text-primary focus:text-primary"
             >
