@@ -8,6 +8,9 @@ class BlogPostService:
     def get_all_posts(self):
         return self.repository.get_all_posts()
 
+    def get_paginated_posts(self, page, per_page):
+        return self.repository.get_paginated_posts(page, per_page)
+
     def get_post_by_id(self, post_id):
         return self.repository.get_post_by_id(post_id)
 

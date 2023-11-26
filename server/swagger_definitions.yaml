@@ -1,10 +1,7 @@
-from db import db
-
-
-class BlogPost(db.Model):
-    """
-    BlogPost model represents a blog post entity.
-    ---
+# swagger_definitions.yaml
+definitions:
+  BlogPost:
+    type: object
     properties:
       id:
         type: integer
@@ -27,24 +24,9 @@ class BlogPost(db.Model):
         type: string
         maxLength: 255
         description: URL or path to the thumbnail image for the blog post.
-    """
 
-    __tablename__ = 'blog_posts'
-
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(50), nullable=False)
-    text = db.Column(db.Text, nullable=False)
-    category = db.Column(db.String(50), nullable=False)
-    thumbnail = db.Column(db.String(255))
-
-    def as_dict(self):
-        return {column.name: getattr(self, column.name) for column in self.__table__.columns}
-
-
-class NewBlogPost:
-    """
-    NewBlogPost represents the data required to create a new blog post.
-    ---
+  NewBlogPost:
+    type: object
     properties:
       title:
         type: string
@@ -62,19 +44,9 @@ class NewBlogPost:
         type: string
         maxLength: 255
         description: URL or path to the thumbnail image for the new blog post.
-    """
 
-    def __init__(self, title, text, category, thumbnail):
-        self.title = title
-        self.text = text
-        self.category = category
-        self.thumbnail = thumbnail
-
-
-class AdminUser(db.Model):
-    """
-    AdminUser model represents an admin user entity.
-    ---
+  AdminUser:
+    type: object
     properties:
       id:
         type: integer
@@ -88,19 +60,9 @@ class AdminUser(db.Model):
         type: string
         maxLength: 50
         description: The password of the admin user.
-    """
 
-    __tablename__ = 'admin_users'
-
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50), unique=True, nullable=False)
-    password = db.Column(db.String(50), nullable=False)
-
-
-class DiscordMessage:
-    """
-    DiscordMessage represents a message from Discord.
-    ---
+  DiscordMessage:
+    type: object
     properties:
       author:
         type: string
@@ -108,8 +70,17 @@ class DiscordMessage:
       message:
         type: string
         description: The content of the Discord message.
-    """
 
-    def __init__(self, author, message):
-        self.author = author
-        self.message = message
+  AccessToken:
+    type: object
+    properties:
+      access_token:
+        type: string
+        description: JWT Access Token
+      token_type:
+        type: string
+        description: Type of the token, usually "bearer"
+      expires_in:
+        type: integer
+        format: int64
+        description: Token expiration time in seconds

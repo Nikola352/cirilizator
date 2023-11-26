@@ -1,3 +1,4 @@
 config.conf
 resources
 __pycache__
+fitz

@@ -6,6 +6,10 @@ class BlogPostRepository:
     def get_all_posts(self):
         return self.model.query.all()
 
+    def get_paginated_posts(self, page, per_page):
+        paginated_posts = self.model.query.paginate(page=page, per_page=per_page, error_out=False)
+        return paginated_posts.items
+
     def get_post_by_id(self, post_id):
         return self.model.query.get(post_id)
 
