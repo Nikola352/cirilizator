@@ -7,7 +7,7 @@ import shutil
 from font_parser import ALLOWED_FONT_TYPES
 
 
-FONTS_DIR = os.path.join(os.getcwd(), 'server', 'resources', 'fonts') # debug
+FONTS_DIR = os.path.join(os.getcwd(), 'server', 'resources', 'fonts')  # debug
 # FONTS_DIR = os.path.join(os.getcwd(), 'resources', 'fonts')
 
 # List of urls to start crawling from
@@ -19,7 +19,8 @@ START_URLS = [
     'https://www.1001freefonts.com'
 ]
 
-# List of prefixes of urls that point to font files (if you expect to stay on the same domain, you might know the prefix)
+# List of prefixes of urls that point to font files
+# (if you expect to stay on the same domain, you might know the prefix)
 # If you don't know the prefix, set it to None
 FILE_URL_PREFIXES = [
     # 'https://www.rnids.rs/sites/default/files',
@@ -86,9 +87,8 @@ def crawl(url, visited_urls, file_url_prefix, depth=3):
         except zipfile.BadZipFile:
             print('Bad zip file:', url)
         return font_files
-    
 
-    ####################################################333
+    # #####################################################
     if re.search(r'\.(otf|ttf|woff2)$', url):
         font_files.append(download_file(url))
         return font_files
@@ -99,7 +99,6 @@ def crawl(url, visited_urls, file_url_prefix, depth=3):
         except zipfile.BadZipFile:
             print('Bad zip file:', url)
         return font_files
-
 
     # if response.headers['Content-Type'] != 'text/html':
     #     return []

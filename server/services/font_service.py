@@ -9,6 +9,7 @@ class FontService:
         self.db = db
         self.font_collector = FontCollector(google_fonts_api_key)
         self.font_collector.start_collector(google_fonts_api_key, self)
+        self.font_queue = self.font_collector.font_queue
 
     def get_all_fonts(self):
         return self.repository.get_all_fonts()
@@ -36,15 +37,19 @@ class FontService:
     def start_collector(self):
         font_thread = threading.Thread(target=self.font_collector.task_start_font_collector, args=(self,))
         font_thread.start()
-        self.font_collector.task_running.set()
 
-        # Wait for the thread to finish
-        font_thread.join()
-
-        # Now you can access the fonts collected by the thread
-        collected_fonts = self.font_collector.fonts
-        for font in collected_fonts:
+        while not self.font_queue.empty():
+            font = self.font_queue.get()
             self.create_font(font)
+        # self.font_collector.task_running.set()
+        #
+        # # Wait for the thread to finish
+        # font_thread.join()
+        #
+        # # Now you can access the fonts collected by the thread
+        # collected_fonts = self.font_collector.fonts
+        # for font in collected_fonts:
+        #     self.create_font(font)
 
     def is_collector_running(self):
         return self.font_collector.task_running.is_set()

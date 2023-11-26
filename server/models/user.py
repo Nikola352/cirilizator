@@ -27,7 +27,7 @@ class AdminUser(db.Model):
     password = db.Column(db.String(50), nullable=False)
 
 
-class NewUser():
+class NewUser:
     """
     NewBlogPost represents the data required to create a new user.
     ---
