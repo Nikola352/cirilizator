@@ -1,3 +1,4 @@
+import os
 from fontTools.ttLib import TTFont
 import numpy as np
 
@@ -7,6 +8,7 @@ ALLOWED_FONT_TYPES = ["woff", "woff2", "ttf", "otf"]
 
 class Font:
     def __init__(self, font_file):
+        self.category = "unknown"
         self.font_file = font_file
         self.all_files = [font_file]
         self.set_from_file(font_file)
@@ -30,6 +32,29 @@ class Font:
         self.font_x_height = self.font["OS/2"].sxHeight if hasattr(self.font["OS/2"], "sxHeight") else 0
         self.font_stem_v = self.font["post"].underlineThickness
         return self
+    
+    def set_category(self):
+        if "post" in self.font and self.font["post"].isFixedPitch:
+            self.category = "monospace"
+        elif "OS/2" in self.font:
+            if self.font["OS/2"].panose.bFamilyType == 2:
+                self.category = "serif"
+            elif self.font["OS/2"].panose.bFamilyType == 0:
+                self.category = "sans-serif"
+            else:
+                ascender_height = self.font["hhea"].ascent
+                descender_height = abs(self.font["hhea"].descent)
+                ascender_descender_ratio = ascender_height / max(1, descender_height)
+
+                # Adjust the threshold based on your observation
+                if ascender_descender_ratio > 1.5:
+                    self.category = "display"
+                else:
+                    self.category = "unknown"
+        else:
+            self.category = "unknown"
+
+        return self
 
     def add_file(self, font_file):
         self.all_files.append(font_file)
@@ -49,7 +74,7 @@ class Font:
         
     
 if __name__ == "__main__":
-    font = Font("resources/fonts/EtarRNIDS-BoldItalic.woff2")
+    font = Font("resources/fonts/Roboto.ttf").set_category()
     print(font.font_family)
     print(font.font_subfamily)
     print(font.font_full_name)
@@ -64,3 +89,11 @@ if __name__ == "__main__":
     print(font.font_cap_height)
     print(font.font_x_height)
     print(font.font_stem_v)
+    print(font.category)
+
+    fonts = []
+    for path in os.listdir("resources/fonts"):
+        font = Font(os.path.join("resources/fonts", path)).set_category()
+        fonts.append(font)
+    print(len([font.font_family for font in fonts if font.category == "serif"]))
+

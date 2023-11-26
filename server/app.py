@@ -21,6 +21,8 @@ from routes.blog_post_routes import create_blog_post_blueprint
 from routes.discord_routes import create_discord_blueprint
 from routes.fonts_routes import create_font_blueprint
 from routes.transliteration_routes import create_transliteration_blueprint
+from models.font_match import FontMatch
+from repositories.font_match_repository import FontMatchRepository
 from services import discord_bot_service
 from services import transliteration_service
 from services.auth_service import AuthService
@@ -61,7 +63,8 @@ auth_service = AuthService(auth_repository)
 blog_post_repository = BlogPostRepository(BlogPost, db)
 blog_post_service = BlogPostService(blog_post_repository)
 font_repository = FontRepository(Font, db)
-font_service = FontService(font_repository, db, GOOGLE_FONTS_API_KEY)
+font_match_repository = FontMatchRepository(model=FontMatch, db=db)
+font_service = FontService(font_repository, font_match_repository, db, GOOGLE_FONTS_API_KEY)
 gpt_service = GPTService(GPT_API_KEY, GPT_API_URL)
 jwt_repository = JWTRepository(JWTToken, db)
 jwt_service = JWTService(jwt_repository)
