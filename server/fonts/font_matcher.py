@@ -40,7 +40,7 @@ def match_fonts(font_service):
         sorted_similarities = sorted(similarities, key=lambda x: x[0], reverse=True)
         idx = random.randint(0, np.min([len(sorted_similarities), 10]))
         print('Found best match: ', font.font_family, '-', serif_fonts[sorted_similarities[idx][1]].font_family, sorted_similarities[idx][0])
-
+        font_service.new_match(font.font_family, serif_fonts[sorted_similarities[idx][1]].font_family, sorted_similarities[idx][0])
 
 if __name__ == "__main__":
     fonts = load_fonts()
