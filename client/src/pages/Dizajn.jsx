@@ -66,14 +66,14 @@ export default function Dizajn() {
                                     {/* <h1 className="text-xl text-primary-50">{font.font_subfamily}</h1> */}
                                     {/* font name bellow */}
                                     <h1 className="text-sm text-primary-50">
-                                        <FontText text={font.font_postscript_name} font={fontsNames[index]} />
+                                        <FontText text={font.font_postscript_name} font={fontsNames && fontsNames[index]} />
                                     </h1>
                                     <h1 className="lg:text-4xl text-3xl font-regular text-primary-300">
-                                        <FontText text={font.font_family} font={fontsNames[index]} />
+                                        <FontText text={font.font_family} font={fontsNames && fontsNames[index]} />
                                     </h1>
                                     <p className="text-md text-primary-50 my-4 pr-2">
                                         <FontText text={"Магични свет дубоких шума крије бројна чуда природе и богатства биолошке разноврсности."}
-                                         font={fontsNames[index]} />
+                                         font={fontsNames && fontsNames[index]} />
                                     </p>
                             </div>
                         </a>
